@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nafe3 Store | نافع ستور</title>
     
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Fira+Code:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Fira+Code:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -50,20 +50,49 @@
             text-align: center;
         }
 
+        /* حاوية رأس الصفحة السحرية لتعبان الأكواد */
         .profile-header {
+            position: relative;
             margin-bottom: 50px;
+            padding: 30px 10px;
             animation: cinematicSpawn 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
         }
 
+        /* ساحة حركة ثعبان الأرقام حول الاسم */
+        .snake-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .snake-segment {
+            position: absolute;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            color: #a3e635;
+            text-shadow: 0 0 8px #a3e635, 0 0 15px #a3e635;
+            opacity: 0;
+            transition: all 0.05s linear;
+        }
+
         .store-name {
+            position: relative;
+            z-index: 2;
             font-size: 3rem;
-            color: #a3e635; 
+            color: #ffffff; 
             font-weight: 900;
             margin-bottom: 8px;
-            text-shadow: 0 0 20px rgba(163, 230, 53, 0.4);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         }
 
         .store-bio {
+            position: relative;
+            z-index: 2;
             font-size: 0.95rem;
             color: #64748b;
             font-family: 'Fira Code', monospace;
@@ -75,11 +104,10 @@
             gap: 24px;
         }
 
-        /* حاوية الزر السحرية لعمل الإطار الدوار */
         .card-wrapper {
             position: relative;
             border-radius: 20px;
-            padding: 2px; /* مسافة لظهور الإطار النيون */
+            padding: 2px;
             overflow: hidden;
             background: rgba(255, 255, 255, 0.01);
             box-shadow: 0 10px 30px rgba(0,0,0,0.7);
@@ -88,7 +116,6 @@
             animation: cardEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
-        /* الإطار النيون الذي يلف حول الزر باستمرار */
         .card-wrapper::before {
             content: '';
             position: absolute;
@@ -101,7 +128,6 @@
             z-index: 1;
         }
 
-        /* كود خلفية الأكواد المتحركة داخل البطاقة */
         .code-bg {
             position: absolute;
             top: 0;
@@ -111,7 +137,7 @@
             font-family: 'Fira Code', monospace;
             font-size: 10px;
             color: var(--glow-color, #a3e635);
-            opacity: 0.12; /* شفافة لكي لا تؤثر على وضوح النص الأصلي */
+            opacity: 0.12;
             overflow: hidden;
             white-space: nowrap;
             pointer-events: none;
@@ -121,7 +147,6 @@
             z-index: 2;
         }
 
-        /* محتوى الزر الفعلي فوق الأكواد والإطار */
         .link-btn {
             position: relative;
             display: flex;
@@ -130,22 +155,16 @@
             border-radius: 18px;
             text-decoration: none;
             color: white;
-            background: #09090e; /* لون داكن قوي لعزل الخلفية */
+            background: #09090e;
             width: 100%;
             height: 100%;
             z-index: 3;
-            transition: background 0.3s, transform 0.1s ease;
+            transition: background 0.3s;
             transform-style: preserve-3d;
         }
 
-        .link-btn:hover {
-            background: #11111a;
-        }
-
-        /* دفع الأيقونة والنصوص للأمام لتأثير 3D */
-        .icon, .btn-img, .btn-text {
-            transform: translateZ(40px);
-        }
+        .link-btn:hover { background: #11111a; }
+        .icon, .btn-img, .btn-text { transform: translateZ(40px); }
 
         .icon {
             font-size: 1.6rem;
@@ -171,46 +190,24 @@
             flex-grow: 1;
         }
 
-        .btn-text .title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-        }
+        .btn-text .title { font-size: 1.15rem; font-weight: 700; }
+        .btn-text .subtitle { font-size: 0.85rem; color: #64748b; margin-top: 4px; }
 
-        .btn-text .subtitle {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-top: 4px;
-        }
-
-        /* متغيرات الألوان النيون للأزرار */
         .wrapper-purple { --glow-color: #c084fc; color: #c084fc; }
         .wrapper-blue   { --glow-color: #60a5fa; color: #60a5fa; }
         .wrapper-green  { --glow-color: #a3e635; color: #a3e635; }
         .wrapper-dark   { --glow-color: #64748b; color: #e2e8f0; }
 
-        /* تفتيح النص الفرعي عند اللمس */
         .link-btn:hover .subtitle { color: #cbd5e1; }
 
-        /* الأنيميشن */
-        @keyframes rotateBorder {
-            100% { transform: rotate(360deg); }
-        }
-
+        @keyframes rotateBorder { 100% { transform: rotate(360deg); } }
+        @keyframes cardEntrance { to { opacity: 1; transform: scale(1) rotateX(0); } }
         @keyframes cinematicSpawn {
             from { opacity: 0; filter: blur(15px); transform: translateY(-30px); }
             to { opacity: 1; filter: blur(0); transform: translateY(0); }
         }
 
-        @keyframes cardEntrance {
-            to { opacity: 1; transform: scale(1) rotateX(0); }
-        }
-
-        .loading {
-            color: #a3e635;
-            font-size: 1.2rem;
-            padding: 50px;
-        }
+        .loading { color: #a3e635; font-size: 1.2rem; padding: 50px; }
     </style>
 </head>
 <body>
@@ -218,13 +215,14 @@
     <div class="background-overlay"></div>
 
     <div class="container">
-        <header class="profile-header">
-            <h1 class="store-name">نافع ستور</h1>
-            <p class="store-bio">// SECURE_CONNECTION_INITIALIZED</p>
+        <header class="profile-header" id="main-header">
+            <div class="snake-container" id="snake-pit"></div>
+            <h1 class="store-name" id="dynamic-store-name">جاري التشفير...</h1>
+            <p class="store-bio" id="dynamic-store-bio">// LINKING_DATA_STREAM</p>
         </header>
 
         <main class="links-list" id="links-container">
-            <div class="loading"><i class="fa-solid fa-terminal fa-bounce"></i> جاري فك تشفير البيانات وضخ الأكواد...</div>
+            <div class="loading"><i class="fa-solid fa-terminal fa-bounce"></i> جاري استدعاء مصفوفة الألغاز...</div>
         </main>
     </div>
 
@@ -232,23 +230,64 @@
         const SPREADSHEET_ID = '1z1iYsSmwvCmUIGBoF8Wo9ZbmOafXebIa3krxa7wn0eM'; 
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
 
-        // دالة مصفوفة الأكواد العشوائية المتحركة داخل كل زر
+        // دالة تحريك ثعبان الأكواد (Code Snake) حول الاسم
+        function initCodeSnake() {
+            const pit = document.getElementById('snake-pit');
+            const snakeLength = 12; // طول الثعبان (عدد الحروف والأرقام المترابطة)
+            const segments = [];
+            const chars = "01010101XYZ<>[]#$@*";
+
+            // إنشاء قطع الثعبان
+            for (let i = 0; i < snakeLength; i++) {
+                const seg = document.createElement('div');
+                seg.className = 'snake-segment';
+                // جعل رأس الثعبان أفتح لوناً والذيل يتلاشى تدرجياً
+                seg.style.opacity = (1 - (i / snakeLength)).toString();
+                if(i === 0) seg.style.color = '#ffffff'; 
+                pit.appendChild(seg);
+                segments.push(seg);
+            }
+
+            let angle = 0;
+            setInterval(() => {
+                angle += 0.04; // سرعة دوران الثعبان حول العنوان
+                
+                // حساب مسار الدوران الدائري (البيضاوي ليتناسب مع أبعاد الهيدر)
+                const radiusX = pit.offsetWidth / 2 - 10;
+                const radiusY = pit.offsetHeight / 2 - 5;
+                const centerX = pit.offsetWidth / 2;
+                const centerY = pit.offsetHeight / 2;
+
+                // تحديث موقع كل قطعة لتلحق بالتي قبلها
+                for (let i = snakeLength - 1; i > 0; i--) {
+                    segments[i].style.left = segments[i-1].style.left;
+                    segments[i].style.top = segments[i-1].style.top;
+                    segments[i].innerHTML = segments[i-1].innerHTML;
+                }
+
+                // حركة الرأس وتوليد رمز عشوائي مستمر له
+                const headX = centerX + radiusX * Math.cos(angle) - 5;
+                const headY = centerY + radiusY * Math.sin(angle) - 10;
+                
+                segments[0].style.left = headX + 'px';
+                segments[0].style.top = headY + 'px';
+                segments[0].innerHTML = chars[Math.floor(Math.random() * chars.length)];
+            }, 40); // تحديث الحركة كل 40 مللي ثانية لسلاسة فائقة
+        }
+
         function startCodeStream(elementId) {
             const el = document.getElementById(elementId);
             if (!el) return;
             const chars = "01010101ABCDEFGHIJKLMNOPQRSTUVWXYZ<>[]{}?/!@#$%^&*+=-_";
-            
             setInterval(() => {
                 let stream = "";
-                for(let i = 0; i < 4; i++) { // توليد 4 أسطر من الأكواد المتحركة
+                for(let i = 0; i < 4; i++) {
                     let line = "";
-                    for(let j = 0; j < 35; j++) {
-                        line += chars[Math.floor(Math.random() * chars.length)];
-                    }
+                    for(let j = 0; j < 35; j++) { line += chars[Math.floor(Math.random() * chars.length)]; }
                     stream += line + "<br>";
                 }
                 el.innerHTML = stream;
-            }, 120); // سرعة تغيير الأكواد بالملي ثانية
+            }, 120);
         }
 
         async function fetchLinks() {
@@ -265,9 +304,21 @@
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
 
+                // --- ميزة سحب اسم المحل من آخر صف في الشيت ديناميكياً ---
+                if (rows.length > 0) {
+                    const lastRow = rows[rows.length - 1];
+                    const sheetStoreName = lastRow.c[0] ? lastRow.c[0].v : 'نافع ستور';
+                    const sheetStoreBio = lastRow.c[1] ? lastRow.c[1].v : '// CONNECTION_SECURE';
+                    
+                    document.getElementById('dynamic-store-name').innerText = sheetStoreName;
+                    document.getElementById('dynamic-store-bio').innerText = sheetStoreBio;
+                }
+
                 let delay = 0; 
 
-                rows.forEach((row, index) => {
+                // نقرأ كل الصفوف ما عدا الصف الأخير (لأنه محجوز لاسم المحل والـ Bio)
+                for (let index = 0; index < rows.length - 1; index++) {
+                    const row = rows[index];
                     const title = row.c[0] ? row.c[0].v : '';
                     const subtitle = row.c[1] ? row.c[1].v : '';
                     const linkUrl = row.c[2] ? row.c[2].v : '#';
@@ -299,7 +350,6 @@
                             ? `<img src="${imageUrl}" class="btn-img" alt="${title}">` 
                             : `<i class="fa-solid ${iconName} icon"></i>`;
 
-                        // تغليف الزر بداخل كبسولة الـ card-wrapper لتوليد حركة الإطار النيون والأكواد الخلفية
                         const cardHTML = `
                             <div class="card-wrapper wrapper-${colorClass}" style="animation-delay: ${delay}s">
                                 <div class="code-bg" id="${streamId}"></div>
@@ -314,12 +364,17 @@
                         `;
                         container.innerHTML += cardHTML;
                         
-                        // بدء تشغيل سيل الأكواد التلقائي لهذا الزر فوراً بعد بنائه
                         setTimeout(() => startCodeStream(streamId), 50);
                     }
-                });
+                }
+
+                if (container.innerHTML === '') {
+                    container.innerHTML = '<div class="error-msg">تابعونا قريباً لمعرفة أحدث خدماتنا وعروضنا الحصرية!</div>';
+                }
 
                 add3DTiltEffect();
+                // تشغيل ثعبان الأكواد حول اسم المحل المحدث
+                initCodeSnake();
 
             } catch (error) {
                 console.error(error);
@@ -330,7 +385,6 @@
         function add3DTiltEffect() {
             const wrappers = document.querySelectorAll('.card-wrapper');
             wrappers.forEach(wrapper => {
-                const card = wrapper.querySelector('.link-btn');
                 wrapper.addEventListener('mousemove', (e) => {
                     const rect = wrapper.getBoundingClientRect();
                     const x = e.clientX - rect.left - (rect.width/2);

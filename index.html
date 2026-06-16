@@ -193,6 +193,7 @@
         .btn-text .title { font-size: 1.15rem; font-weight: 700; }
         .btn-text .subtitle { font-size: 0.85rem; color: #64748b; margin-top: 4px; }
 
+        /* متغيرات الألوان النيون للأزرار */
         .wrapper-purple { --glow-color: #c084fc; color: #c084fc; }
         .wrapper-blue   { --glow-color: #60a5fa; color: #60a5fa; }
         .wrapper-green  { --glow-color: #a3e635; color: #a3e635; }
@@ -230,18 +231,16 @@
         const SPREADSHEET_ID = '1z1iYsSmwvCmUIGBoF8Wo9ZbmOafXebIa3krxa7wn0eM'; 
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
 
-        // دالة تحريك ثعبان الأكواد (Code Snake) حول الاسم
+        // دالة حركة ثعبان الأكواد الرقمية المتوهجة
         function initCodeSnake() {
             const pit = document.getElementById('snake-pit');
-            const snakeLength = 12; // طول الثعبان (عدد الحروف والأرقام المترابطة)
+            const snakeLength = 14; 
             const segments = [];
             const chars = "01010101XYZ<>[]#$@*";
 
-            // إنشاء قطع الثعبان
             for (let i = 0; i < snakeLength; i++) {
                 const seg = document.createElement('div');
                 seg.className = 'snake-segment';
-                // جعل رأس الثعبان أفتح لوناً والذيل يتلاشى تدرجياً
                 seg.style.opacity = (1 - (i / snakeLength)).toString();
                 if(i === 0) seg.style.color = '#ffffff'; 
                 pit.appendChild(seg);
@@ -250,29 +249,26 @@
 
             let angle = 0;
             setInterval(() => {
-                angle += 0.04; // سرعة دوران الثعبان حول العنوان
+                angle += 0.04; 
                 
-                // حساب مسار الدوران الدائري (البيضاوي ليتناسب مع أبعاد الهيدر)
                 const radiusX = pit.offsetWidth / 2 - 10;
                 const radiusY = pit.offsetHeight / 2 - 5;
                 const centerX = pit.offsetWidth / 2;
                 const centerY = pit.offsetHeight / 2;
 
-                // تحديث موقع كل قطعة لتلحق بالتي قبلها
                 for (let i = snakeLength - 1; i > 0; i--) {
                     segments[i].style.left = segments[i-1].style.left;
                     segments[i].style.top = segments[i-1].style.top;
                     segments[i].innerHTML = segments[i-1].innerHTML;
                 }
 
-                // حركة الرأس وتوليد رمز عشوائي مستمر له
                 const headX = centerX + radiusX * Math.cos(angle) - 5;
                 const headY = centerY + radiusY * Math.sin(angle) - 10;
                 
                 segments[0].style.left = headX + 'px';
                 segments[0].style.top = headY + 'px';
                 segments[0].innerHTML = chars[Math.floor(Math.random() * chars.length)];
-            }, 40); // تحديث الحركة كل 40 مللي ثانية لسلاسة فائقة
+            }, 40); 
         }
 
         function startCodeStream(elementId) {
@@ -304,21 +300,26 @@
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
 
-                // --- ميزة سحب اسم المحل من آخر صف في الشيت ديناميكياً ---
-                if (rows.length > 0) {
-                    const lastRow = rows[rows.length - 1];
-                    const sheetStoreName = lastRow.c[0] ? lastRow.c[0].v : 'نافع ستور';
-                    const sheetStoreBio = lastRow.c[1] ? lastRow.c[1].v : '// CONNECTION_SECURE';
-                    
-                    document.getElementById('dynamic-store-name').innerText = sheetStoreName;
-                    document.getElementById('dynamic-store-bio').innerText = sheetStoreBio;
+                // --- 🛠️ استخراج اسم ووصف المحل من العمود I (حرف الـ I ترتيبه 8 في المصفوفة) ---
+                let sheetStoreName = 'نافع ستور';
+                let sheetStoreBio = '// CONNECTION_SECURE';
+
+                // الخلية I2 (الصف الثاني في الشيت، أي الموضع 0 في البيانات بعد صف الهيدر)
+                if (rows[0] && rows[0].c[8] && rows[0].c[8].v) {
+                    sheetStoreName = rows[0].c[8].v;
                 }
+                // الخلية I3 (الصف الثالث في الشيت، أي الموضع 1)
+                if (rows[1] && rows[1].c[8] && rows[1].c[8].v) {
+                    sheetStoreBio = rows[1].c[8].v;
+                }
+
+                document.getElementById('dynamic-store-name').innerText = sheetStoreName;
+                document.getElementById('dynamic-store-bio').innerText = sheetStoreBio;
 
                 let delay = 0; 
 
-                // نقرأ كل الصفوف ما عدا الصف الأخير (لأنه محجوز لاسم المحل والـ Bio)
-                for (let index = 0; index < rows.length - 1; index++) {
-                    const row = rows[index];
+                // قراءة كل الأزرار والخدمات بشكل طبيعي
+                rows.forEach((row, index) => {
                     const title = row.c[0] ? row.c[0].v : '';
                     const subtitle = row.c[1] ? row.c[1].v : '';
                     const linkUrl = row.c[2] ? row.c[2].v : '#';
@@ -366,15 +367,14 @@
                         
                         setTimeout(() => startCodeStream(streamId), 50);
                     }
-                }
+                });
 
                 if (container.innerHTML === '') {
                     container.innerHTML = '<div class="error-msg">تابعونا قريباً لمعرفة أحدث خدماتنا وعروضنا الحصرية!</div>';
                 }
 
                 add3DTiltEffect();
-                // تشغيل ثعبان الأكواد حول اسم المحل المحدث
-                initCodeSnake();
+                initCodeSnake(); // تشغيل الأرقام الطائرة حول العنوان الرئيسي للمتجر
 
             } catch (error) {
                 console.error(error);

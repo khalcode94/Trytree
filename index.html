@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nafe3 Store | نافع ستور</title>
     
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Fira+Code:wght@400;500&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- تصميم تفاعلي غامض ومبهر لـ نافع ستور --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -18,7 +17,7 @@
         }
 
         body {
-            background-color: #050508;
+            background-color: #030305;
             background-image: url('469171.jpg'); 
             background-size: cover;
             background-position: center;
@@ -29,35 +28,17 @@
             align-items: flex-start;
             color: #ffffff;
             overflow-x: hidden;
-            perspective: 1000px; /* لتمكين التأثيرات ثلاثية الأبعاد */
+            perspective: 1000px;
         }
 
-        /* طبقة حماية وخلفية متحركة */
         .background-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, rgba(10, 10, 15, 0.8) 0%, rgba(5, 5, 8, 0.95) 100%);
+            background: radial-gradient(circle at center, rgba(3, 3, 5, 0.85) 0%, rgba(1, 1, 2, 0.98) 100%);
             z-index: 1;
-        }
-
-        /* جزيئات طافية في الخلفية كاللغز */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-        .particle {
-            position: absolute;
-            background: rgba(163, 230, 53, 0.1);
-            border-radius: 50%;
-            animation: floatAround 12s infinite linear;
         }
 
         .container {
@@ -69,7 +50,6 @@
             text-align: center;
         }
 
-        /* أنيميشن الهيدر السحري */
         .profile-header {
             margin-bottom: 50px;
             animation: cinematicSpawn 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
@@ -80,51 +60,91 @@
             color: #a3e635; 
             font-weight: 900;
             margin-bottom: 8px;
-            text-shadow: 0 0 20px rgba(163, 230, 53, 0.4), 0 0 40px rgba(163, 230, 53, 0.2);
-            letter-spacing: -1px;
+            text-shadow: 0 0 20px rgba(163, 230, 53, 0.4);
         }
 
         .store-bio {
             font-size: 0.95rem;
-            color: #8e9196;
-            letter-spacing: 1px;
+            color: #64748b;
+            font-family: 'Fira Code', monospace;
         }
 
         .links-list {
             display: flex;
             flex-direction: column;
-            gap: 22px;
+            gap: 24px;
         }
 
-        /* بطاقات الروابط السحرية ثلاثية الأبعاد */
+        /* حاوية الزر السحرية لعمل الإطار الدوار */
+        .card-wrapper {
+            position: relative;
+            border-radius: 20px;
+            padding: 2px; /* مسافة لظهور الإطار النيون */
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.01);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            opacity: 0;
+            transform: scale(0.9) rotateX(-15deg);
+            animation: cardEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* الإطار النيون الذي يلف حول الزر باستمرار */
+        .card-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, var(--glow-color, #a3e635), transparent 30%);
+            animation: rotateBorder 4s linear infinite;
+            z-index: 1;
+        }
+
+        /* كود خلفية الأكواد المتحركة داخل البطاقة */
+        .code-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Fira Code', monospace;
+            font-size: 10px;
+            color: var(--glow-color, #a3e635);
+            opacity: 0.12; /* شفافة لكي لا تؤثر على وضوح النص الأصلي */
+            overflow: hidden;
+            white-space: nowrap;
+            pointer-events: none;
+            direction: ltr;
+            text-align: left;
+            padding: 5px;
+            z-index: 2;
+        }
+
+        /* محتوى الزر الفعلي فوق الأكواد والإطار */
         .link-btn {
+            position: relative;
             display: flex;
             align-items: center;
-            padding: 18px 26px;
-            border-radius: 20px;
+            padding: 18px 24px;
+            border-radius: 18px;
             text-decoration: none;
             color: white;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: #09090e; /* لون داكن قوي لعزل الخلفية */
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            transition: background 0.3s, transform 0.1s ease;
             transform-style: preserve-3d;
-            transform: translateZ(0) scale(0.9) rotateX(-20deg);
-            opacity: 0;
-            animation: cardEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            transition: border-color 0.3s, box-shadow 0.3s, transform 0.1s ease;
         }
 
-        /* عند تمرير الماوس أو اللمس القوي */
         .link-btn:hover {
-            border-color: rgba(255, 255, 255, 0.25);
-            background: rgba(255, 255, 255, 0.07);
+            background: #11111a;
         }
 
-        /* دفع النص والأيقونة للأمام بـ 3D */
+        /* دفع الأيقونة والنصوص للأمام لتأثير 3D */
         .icon, .btn-img, .btn-text {
-            transform: translateZ(30px); /* يخرج العنصر للأمام كأنه مجسم */
+            transform: translateZ(40px);
         }
 
         .icon {
@@ -136,12 +156,12 @@
         }
 
         .btn-img {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
             margin-left: 20px;
             object-fit: cover;
-            border: 2px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .btn-text {
@@ -154,42 +174,36 @@
         .btn-text .title {
             font-size: 1.15rem;
             font-weight: 700;
+            letter-spacing: -0.3px;
         }
 
         .btn-text .subtitle {
             font-size: 0.85rem;
-            color: #94a3b8;
+            color: #64748b;
             margin-top: 4px;
         }
 
-        /* ألوان وهالات الأزرار المضيئة */
-        .btn-purple { color: #c084fc; box-shadow: 0 4px 20px rgba(147, 51, 234, 0.15); }
-        .btn-purple:hover { box-shadow: 0 15px 35px rgba(147, 51, 234, 0.4); border-color: #c084fc; }
+        /* متغيرات الألوان النيون للأزرار */
+        .wrapper-purple { --glow-color: #c084fc; color: #c084fc; }
+        .wrapper-blue   { --glow-color: #60a5fa; color: #60a5fa; }
+        .wrapper-green  { --glow-color: #a3e635; color: #a3e635; }
+        .wrapper-dark   { --glow-color: #64748b; color: #e2e8f0; }
 
-        .btn-blue { color: #60a5fa; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15); }
-        .btn-blue:hover { box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4); border-color: #60a5fa; }
+        /* تفتيح النص الفرعي عند اللمس */
+        .link-btn:hover .subtitle { color: #cbd5e1; }
 
-        .btn-green { color: #a3e635; box-shadow: 0 4px 20px rgba(101, 163, 13, 0.15); }
-        .btn-green:hover { box-shadow: 0 15px 35px rgba(163, 230, 53, 0.4); border-color: #a3e635; }
+        /* الأنيميشن */
+        @keyframes rotateBorder {
+            100% { transform: rotate(360deg); }
+        }
 
-        .btn-dark { color: #e2e8f0; box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05); }
-        .btn-dark:hover { box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2); border-color: #ffffff; }
-
-        /* الأنيميشنز */
         @keyframes cinematicSpawn {
-            from { opacity: 0; filter: blur(15px); transform: translateY(-40px); }
+            from { opacity: 0; filter: blur(15px); transform: translateY(-30px); }
             to { opacity: 1; filter: blur(0); transform: translateY(0); }
         }
 
         @keyframes cardEntrance {
-            to { opacity: 1; transform: translateZ(0) scale(1) rotateX(0); }
-        }
-
-        @keyframes floatAround {
-            0% { transform: translateY(100vh) translateX(0) scale(0.5); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-10vh) translateX(50px) scale(1.2); opacity: 0; }
+            to { opacity: 1; transform: scale(1) rotateX(0); }
         }
 
         .loading {
@@ -202,17 +216,15 @@
 <body>
 
     <div class="background-overlay"></div>
-    
-    <div class="particles" id="particles-container"></div>
 
     <div class="container">
         <header class="profile-header">
             <h1 class="store-name">نافع ستور</h1>
-            <p class="store-bio">Nafe3.Store For Mobile & Internet Services</p>
+            <p class="store-bio">// SECURE_CONNECTION_INITIALIZED</p>
         </header>
 
         <main class="links-list" id="links-container">
-            <div class="loading"><i class="fa-solid fa-circle-notch fa-spin"></i> جاري استدعاء العروض المشفرة...</div>
+            <div class="loading"><i class="fa-solid fa-terminal fa-bounce"></i> جاري فك تشفير البيانات وضخ الأكواد...</div>
         </main>
     </div>
 
@@ -220,20 +232,24 @@
         const SPREADSHEET_ID = '1z1iYsSmwvCmUIGBoF8Wo9ZbmOafXebIa3krxa7wn0eM'; 
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
 
-        // 1. توليد تأثير الجزيئات الطافية في الخلفية تلقائياً
-        function createParticles() {
-            const pContainer = document.getElementById('particles-container');
-            for(let i=0; i<15; i++) {
-                let particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + 'vw';
-                particle.style.width = particle.style.height = Math.random() * 8 + 4 + 'px';
-                particle.style.animationDelay = Math.random() * 10 + 's';
-                particle.style.animationDuration = Math.random() * 8 + 8 + 's';
-                pContainer.appendChild(particle);
-            }
+        // دالة مصفوفة الأكواد العشوائية المتحركة داخل كل زر
+        function startCodeStream(elementId) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            const chars = "01010101ABCDEFGHIJKLMNOPQRSTUVWXYZ<>[]{}?/!@#$%^&*+=-_";
+            
+            setInterval(() => {
+                let stream = "";
+                for(let i = 0; i < 4; i++) { // توليد 4 أسطر من الأكواد المتحركة
+                    let line = "";
+                    for(let j = 0; j < 35; j++) {
+                        line += chars[Math.floor(Math.random() * chars.length)];
+                    }
+                    stream += line + "<br>";
+                }
+                el.innerHTML = stream;
+            }, 120); // سرعة تغيير الأكواد بالملي ثانية
         }
-        createParticles();
 
         async function fetchLinks() {
             try {
@@ -251,7 +267,7 @@
 
                 let delay = 0; 
 
-                rows.forEach(row => {
+                rows.forEach((row, index) => {
                     const title = row.c[0] ? row.c[0].v : '';
                     const subtitle = row.c[1] ? row.c[1].v : '';
                     const linkUrl = row.c[2] ? row.c[2].v : '#';
@@ -277,50 +293,57 @@
 
                     if (shouldShow && title) {
                         delay += 0.12; 
+                        const streamId = `stream-${index}`;
                         
                         const mediaHTML = imageUrl 
                             ? `<img src="${imageUrl}" class="btn-img" alt="${title}">` 
                             : `<i class="fa-solid ${iconName} icon"></i>`;
 
-                        const btnHTML = `
-                            <a href="${linkUrl}" class="link-btn btn-${colorClass}" target="_blank" style="animation-delay: ${delay}s">
-                                ${mediaHTML}
-                                <div class="btn-text">
-                                    <span class="title">${title}</span>
-                                    ${subtitle ? `<span class="subtitle">${subtitle}</span>` : ''}
-                                </div>
-                            </a>
+                        // تغليف الزر بداخل كبسولة الـ card-wrapper لتوليد حركة الإطار النيون والأكواد الخلفية
+                        const cardHTML = `
+                            <div class="card-wrapper wrapper-${colorClass}" style="animation-delay: ${delay}s">
+                                <div class="code-bg" id="${streamId}"></div>
+                                <a href="${linkUrl}" class="link-btn">
+                                    ${mediaHTML}
+                                    <div class="btn-text">
+                                        <span class="title">${title}</span>
+                                        ${subtitle ? `<span class="subtitle">${subtitle}</span>` : ''}
+                                    </div>
+                                </a>
+                            </div>
                         `;
-                        container.innerHTML += btnHTML;
+                        container.innerHTML += cardHTML;
+                        
+                        // بدء تشغيل سيل الأكواد التلقائي لهذا الزر فوراً بعد بنائه
+                        setTimeout(() => startCodeStream(streamId), 50);
                     }
                 });
 
-                // 2. تفعيل تأثير الميلان ثلاثي الأبعاد الذكي (3D Tilt Effect) لكل الأزرار بعد توليدها
                 add3DTiltEffect();
 
             } catch (error) {
                 console.error(error);
-                document.getElementById('links-container').innerHTML = '<div class="loading">خطأ في الاتصال بالخادم الرئيسي.</div>';
+                document.getElementById('links-container').innerHTML = '<div class="loading">ERROR_CONNECTION_FAILED</div>';
             }
         }
 
         function add3DTiltEffect() {
-            const cards = document.querySelectorAll('.link-btn');
-            cards.forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
+            const wrappers = document.querySelectorAll('.card-wrapper');
+            wrappers.forEach(wrapper => {
+                const card = wrapper.querySelector('.link-btn');
+                wrapper.addEventListener('mousemove', (e) => {
+                    const rect = wrapper.getBoundingClientRect();
                     const x = e.clientX - rect.left - (rect.width/2);
                     const y = e.clientY - rect.top - (rect.height/2);
                     
-                    // حساب زوايا الميلان بناءً على موقع الإصبع/الماوس
                     const angleX = -(y / (rect.height/2)) * 15;
                     const angleY = (x / (rect.width/2)) * 15;
                     
-                    card.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.03)`;
+                    wrapper.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.03)`;
                 });
                 
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+                wrapper.addEventListener('mouseleave', () => {
+                    wrapper.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
                 });
             });
         }

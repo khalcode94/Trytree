@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nafe3 Store | نافع ستور</title>
     
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- واجهة مستخدم فخمة ومطورة لـ نافع ستور --- */
+        /* --- تصميم تفاعلي غامض ومبهر لـ نافع ستور --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -18,7 +18,7 @@
         }
 
         body {
-            background-color: #060608;
+            background-color: #050508;
             background-image: url('469171.jpg'); 
             background-size: cover;
             background-position: center;
@@ -29,31 +29,35 @@
             align-items: flex-start;
             color: #ffffff;
             overflow-x: hidden;
-            position: relative;
+            perspective: 1000px; /* لتمكين التأثيرات ثلاثية الأبعاد */
         }
 
-        /* تأثير الخلفية الحية المتحركة في العمق */
+        /* طبقة حماية وخلفية متحركة */
         .background-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(6, 6, 8, 0.85), rgba(15, 12, 22, 0.8));
+            background: radial-gradient(circle at center, rgba(10, 10, 15, 0.8) 0%, rgba(5, 5, 8, 0.95) 100%);
             z-index: 1;
         }
 
-        /* وهج ضوئي في الخلفية متحرك يعطي لمسة جمالية */
-        body::before {
-            content: '';
+        /* جزيئات طافية في الخلفية كاللغز */
+        .particles {
             position: fixed;
-            top: -20%;
-            left: -20%;
-            width: 140%;
-            height: 140%;
-            background: radial-gradient(circle, rgba(163, 230, 53, 0.04) 0%, rgba(109, 40, 217, 0.03) 50%, transparent 100%);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 1;
-            animation: drift 20s linear infinite;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(163, 230, 53, 0.1);
+            border-radius: 50%;
+            animation: floatAround 12s infinite linear;
         }
 
         .container {
@@ -61,90 +65,83 @@
             z-index: 2;
             width: 100%;
             max-width: 440px;
-            padding: 60px 24px;
+            padding: 60px 20px;
             text-align: center;
         }
 
-        /* أنيميشن رأس الصفحة */
+        /* أنيميشن الهيدر السحري */
         .profile-header {
-            margin-bottom: 45px;
-            animation: blurIn 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            margin-bottom: 50px;
+            animation: cinematicSpawn 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
         }
 
         .store-name {
-            font-size: 2.8rem;
+            font-size: 3rem;
             color: #a3e635; 
-            font-weight: 700;
+            font-weight: 900;
             margin-bottom: 8px;
-            letter-spacing: -0.5px;
-            text-shadow: 0 0 30px rgba(163, 230, 53, 0.3);
+            text-shadow: 0 0 20px rgba(163, 230, 53, 0.4), 0 0 40px rgba(163, 230, 53, 0.2);
+            letter-spacing: -1px;
         }
 
         .store-bio {
             font-size: 0.95rem;
-            color: #a1a1aa;
-            font-weight: 400;
-            opacity: 0.9;
+            color: #8e9196;
+            letter-spacing: 1px;
         }
 
         .links-list {
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 22px;
         }
 
-        /* تصميم الأزرار الزجاجية الفاخرة */
+        /* بطاقات الروابط السحرية ثلاثية الأبعاد */
         .link-btn {
             display: flex;
             align-items: center;
-            padding: 16px 24px;
-            border-radius: 24px; /* زوايا انسيابية حديثة وليست دائرية حادة */
+            padding: 18px 26px;
+            border-radius: 20px;
             text-decoration: none;
             color: white;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.1);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            opacity: 0; 
-            transform: translateY(25px);
-            animation: slideUpIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform-style: preserve-3d;
+            transform: translateZ(0) scale(0.9) rotateX(-20deg);
+            opacity: 0;
+            animation: cardEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.1s ease;
         }
 
-        /* تأثيرات الـ Hover الاحترافية بالتوهج */
+        /* عند تمرير الماوس أو اللمس القوي */
         .link-btn:hover {
-            transform: translateY(-5px) scale(1.015);
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.07);
         }
 
-        /* حركة تفاعلية ميكروية للأيقونات والصور */
-        .icon {
-            font-size: 1.4rem;
-            margin-left: 18px;
-            width: 28px;
-            text-align: center;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* دفع النص والأيقونة للأمام بـ 3D */
+        .icon, .btn-img, .btn-text {
+            transform: translateZ(30px); /* يخرج العنصر للأمام كأنه مجسم */
         }
-        
-        .link-btn:hover .icon {
-            transform: scale(1.2) rotate(-8deg);
+
+        .icon {
+            font-size: 1.6rem;
+            margin-left: 20px;
+            width: 32px;
+            text-align: center;
+            text-shadow: 0 0 10px currentColor;
         }
 
         .btn-img {
-            width: 44px;
-            height: 44px;
-            border-radius: 16px; /* متناسقة مع زوايا الزر */
-            margin-left: 18px;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            margin-left: 20px;
             object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s ease;
-        }
-
-        .link-btn:hover .btn-img {
-            transform: scale(1.1) rotate(5deg);
-            border-color: #a3e635;
+            border: 2px solid rgba(255,255,255,0.1);
         }
 
         .btn-text {
@@ -155,74 +152,58 @@
         }
 
         .btn-text .title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            letter-spacing: -0.3px;
+            font-size: 1.15rem;
+            font-weight: 700;
         }
 
         .btn-text .subtitle {
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             color: #94a3b8;
-            margin-top: 3px;
-            transition: color 0.3s ease;
+            margin-top: 4px;
         }
 
-        .link-btn:hover .btn-text .subtitle {
-            color: rgba(255, 255, 255, 0.9);
+        /* ألوان وهالات الأزرار المضيئة */
+        .btn-purple { color: #c084fc; box-shadow: 0 4px 20px rgba(147, 51, 234, 0.15); }
+        .btn-purple:hover { box-shadow: 0 15px 35px rgba(147, 51, 234, 0.4); border-color: #c084fc; }
+
+        .btn-blue { color: #60a5fa; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15); }
+        .btn-blue:hover { box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4); border-color: #60a5fa; }
+
+        .btn-green { color: #a3e635; box-shadow: 0 4px 20px rgba(101, 163, 13, 0.15); }
+        .btn-green:hover { box-shadow: 0 15px 35px rgba(163, 230, 53, 0.4); border-color: #a3e635; }
+
+        .btn-dark { color: #e2e8f0; box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05); }
+        .btn-dark:hover { box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2); border-color: #ffffff; }
+
+        /* الأنيميشنز */
+        @keyframes cinematicSpawn {
+            from { opacity: 0; filter: blur(15px); transform: translateY(-40px); }
+            to { opacity: 1; filter: blur(0); transform: translateY(0); }
         }
 
-        /* تدرجات ألوان الوهج والخلفيات عند اللمس */
-        .btn-purple:hover { box-shadow: 0 12px 30px rgba(139, 92, 246, 0.25); border-color: rgba(139, 92, 246, 0.4); }
-        .btn-purple .icon { color: #a78bfa; }
+        @keyframes cardEntrance {
+            to { opacity: 1; transform: translateZ(0) scale(1) rotateX(0); }
+        }
 
-        .btn-blue:hover { box-shadow: 0 12px 30px rgba(59, 130, 246, 0.25); border-color: rgba(59, 130, 246, 0.4); }
-        .btn-blue .icon { color: #60a5fa; }
+        @keyframes floatAround {
+            0% { transform: translateY(100vh) translateX(0) scale(0.5); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) translateX(50px) scale(1.2); opacity: 0; }
+        }
 
-        .btn-green:hover { box-shadow: 0 12px 30px rgba(163, 230, 53, 0.2); border-color: rgba(163, 230, 53, 0.4); }
-        .btn-green .icon { color: #a3e635; }
-
-        .btn-dark:hover { box-shadow: 0 12px 30px rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.3); }
-        .btn-dark .icon { color: #e2e8f0; }
-
-        /* الأنيميشن اللطيف للتحميل والخطأ */
         .loading {
             color: #a3e635;
-            font-size: 1.1rem;
-            padding: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .error-msg {
-            color: #f87171;
-            font-size: 1rem;
-            padding: 30px;
-            background: rgba(248, 113, 113, 0.05);
-            border: 1px solid rgba(248, 113, 113, 0.1);
-            border-radius: 20px;
-        }
-
-        /* تعريف حركات الـ CSS */
-        @keyframes blurIn {
-            from { opacity: 0; filter: blur(10px); transform: scale(0.95); }
-            to { opacity: 1; filter: blur(0); transform: scale(1); }
-        }
-
-        @keyframes slideUpIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes drift {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            font-size: 1.2rem;
+            padding: 50px;
         }
     </style>
 </head>
 <body>
 
     <div class="background-overlay"></div>
+    
+    <div class="particles" id="particles-container"></div>
 
     <div class="container">
         <header class="profile-header">
@@ -231,14 +212,28 @@
         </header>
 
         <main class="links-list" id="links-container">
-            <div class="loading"><i class="fa-solid fa-circle-notch fa-spin"></i> جاري تحميل الخدمات الفاخرة...</div>
+            <div class="loading"><i class="fa-solid fa-circle-notch fa-spin"></i> جاري استدعاء العروض المشفرة...</div>
         </main>
     </div>
 
     <script>
-        // معرّف الجدول الخاص بك سليم ومحفوظ
         const SPREADSHEET_ID = '1z1iYsSmwvCmUIGBoF8Wo9ZbmOafXebIa3krxa7wn0eM'; 
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
+
+        // 1. توليد تأثير الجزيئات الطافية في الخلفية تلقائياً
+        function createParticles() {
+            const pContainer = document.getElementById('particles-container');
+            for(let i=0; i<15; i++) {
+                let particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.width = particle.style.height = Math.random() * 8 + 4 + 'px';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = Math.random() * 8 + 8 + 's';
+                pContainer.appendChild(particle);
+            }
+        }
+        createParticles();
 
         async function fetchLinks() {
             try {
@@ -281,7 +276,7 @@
                     }
 
                     if (shouldShow && title) {
-                        delay += 0.1; // سرعة تتابع مثالية ومريحة للعين
+                        delay += 0.12; 
                         
                         const mediaHTML = imageUrl 
                             ? `<img src="${imageUrl}" class="btn-img" alt="${title}">` 
@@ -300,14 +295,34 @@
                     }
                 });
 
-                if (container.innerHTML === '') {
-                    container.innerHTML = '<div class="error-msg">تابعونا قريباً لمعرفة أحدث خدماتنا وعروضنا الحصرية!</div>';
-                }
+                // 2. تفعيل تأثير الميلان ثلاثي الأبعاد الذكي (3D Tilt Effect) لكل الأزرار بعد توليدها
+                add3DTiltEffect();
 
             } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('links-container').innerHTML = '<div class="error-msg"><i class="fa-solid fa-triangle-exclamation"></i> عذراً، تعذر تحديث الخدمات حالياً.</div>';
+                console.error(error);
+                document.getElementById('links-container').innerHTML = '<div class="loading">خطأ في الاتصال بالخادم الرئيسي.</div>';
             }
+        }
+
+        function add3DTiltEffect() {
+            const cards = document.querySelectorAll('.link-btn');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left - (rect.width/2);
+                    const y = e.clientY - rect.top - (rect.height/2);
+                    
+                    // حساب زوايا الميلان بناءً على موقع الإصبع/الماوس
+                    const angleX = -(y / (rect.height/2)) * 15;
+                    const angleY = (x / (rect.width/2)) * 15;
+                    
+                    card.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.03)`;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+                });
+            });
         }
 
         fetchLinks();

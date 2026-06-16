@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nafe3 Store | نافع ستور</title>
     
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- كود التصميم والتأثيرات البصرية (CSS) --- */
+        /* --- واجهة مستخدم فخمة ومطورة لـ نافع ستور --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -18,8 +18,7 @@
         }
 
         body {
-            background-color: #0c0c0c;
-            /* استبدل 469171.jpg باسم صورة خلفيتك إذا قمت برفعها على GitHub */
+            background-color: #060608;
             background-image: url('469171.jpg'); 
             background-size: cover;
             background-position: center;
@@ -30,104 +29,124 @@
             align-items: flex-start;
             color: #ffffff;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* طبقة حماية داكنة وتأثير زجاجي */
+        /* تأثير الخلفية الحية المتحركة في العمق */
         .background-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(15, 15, 15, 0.7));
+            background: linear-gradient(135deg, rgba(6, 6, 8, 0.85), rgba(15, 12, 22, 0.8));
             z-index: 1;
+        }
+
+        /* وهج ضوئي في الخلفية متحرك يعطي لمسة جمالية */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -20%;
+            width: 140%;
+            height: 140%;
+            background: radial-gradient(circle, rgba(163, 230, 53, 0.04) 0%, rgba(109, 40, 217, 0.03) 50%, transparent 100%);
+            z-index: 1;
+            animation: drift 20s linear infinite;
         }
 
         .container {
             position: relative;
             z-index: 2;
             width: 100%;
-            max-width: 450px;
-            padding: 50px 20px;
+            max-width: 440px;
+            padding: 60px 24px;
             text-align: center;
         }
 
-        /* تصميم رأس الصفحة */
+        /* أنيميشن رأس الصفحة */
         .profile-header {
-            margin-bottom: 35px;
-            animation: fadeInDown 1s ease-out;
+            margin-bottom: 45px;
+            animation: blurIn 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
         .store-name {
-            font-size: 2.6rem;
-            color: #a3e635; /* اللون الأخضر الليموني الجذاب */
+            font-size: 2.8rem;
+            color: #a3e635; 
             font-weight: 700;
-            margin-bottom: 5px;
-            text-shadow: 0 0 15px rgba(163, 230, 53, 0.2);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 30px rgba(163, 230, 53, 0.3);
         }
 
         .store-bio {
-            font-size: 0.9rem;
-            color: #b3b3b3;
+            font-size: 0.95rem;
+            color: #a1a1aa;
+            font-weight: 400;
+            opacity: 0.9;
         }
 
-        /* حاوية الأزرار */
         .links-list {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 18px;
         }
 
-        /* تصميم الأزرار الذكية */
+        /* تصميم الأزرار الزجاجية الفاخرة */
         .link-btn {
             display: flex;
             align-items: center;
-            padding: 14px 22px;
-            border-radius: 40px;
+            padding: 16px 24px;
+            border-radius: 24px; /* زوايا انسيابية حديثة وليست دائرية حادة */
             text-decoration: none;
             color: white;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0; /* يبدأ مخفي لعمل حركة الظهور التتابعي */
-            animation: fadeInUp 0.6s ease-out forwards;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.1);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0; 
+            transform: translateY(25px);
+            animation: slideUpIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* تأثيرات الحركة عند تمرير الماوس */
+        /* تأثيرات الـ Hover الاحترافية بالتوهج */
         .link-btn:hover {
-            transform: translateY(-4px) scale(1.01);
-            box-shadow: 0 8px 25px rgba(163, 230, 53, 0.2);
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(163, 230, 53, 0.4);
+            transform: translateY(-5px) scale(1.015);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
-        /* أيقونات الأزرار */
+        /* حركة تفاعلية ميكروية للأيقونات والصور */
         .icon {
-            font-size: 1.3rem;
-            margin-left: 15px;
-            width: 30px;
+            font-size: 1.4rem;
+            margin-left: 18px;
+            width: 28px;
             text-align: center;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         
         .link-btn:hover .icon {
-            transform: rotate(10deg) scale(1.1);
+            transform: scale(1.2) rotate(-8deg);
         }
 
-        /* الصور المستدعاة من الشيت داخل الزر */
         .btn-img {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            margin-left: 15px;
+            width: 44px;
+            height: 44px;
+            border-radius: 16px; /* متناسقة مع زوايا الزر */
+            margin-left: 18px;
             object-fit: cover;
-            border: 2px solid #a3e635;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
         }
 
-        /* نصوص الأزرار */
+        .link-btn:hover .btn-img {
+            transform: scale(1.1) rotate(5deg);
+            border-color: #a3e635;
+        }
+
         .btn-text {
             display: flex;
             flex-direction: column;
@@ -136,44 +155,68 @@
         }
 
         .btn-text .title {
-            font-size: 1.05rem;
-            font-weight: 700;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
         }
 
         .btn-text .subtitle {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 2px;
+            font-size: 0.82rem;
+            color: #94a3b8;
+            margin-top: 3px;
+            transition: color 0.3s ease;
         }
 
-        /* ألوان التدرج للأزرار */
-        .btn-purple { background: linear-gradient(135deg, rgba(109, 40, 217, 0.8), rgba(76, 29, 149, 0.8)); }
-        .btn-blue   { background: linear-gradient(135deg, rgba(29, 78, 216, 0.8), rgba(30, 58, 138, 0.8)); }
-        .btn-green  { background: linear-gradient(135deg, rgba(5, 150, 105, 0.8), rgba(6, 78, 59, 0.8)); }
-        .btn-dark   { background: linear-gradient(135deg, rgba(55, 65, 81, 0.8), rgba(17, 24, 27, 0.8)); }
+        .link-btn:hover .btn-text .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+        }
 
-        .loading, .error-msg {
+        /* تدرجات ألوان الوهج والخلفيات عند اللمس */
+        .btn-purple:hover { box-shadow: 0 12px 30px rgba(139, 92, 246, 0.25); border-color: rgba(139, 92, 246, 0.4); }
+        .btn-purple .icon { color: #a78bfa; }
+
+        .btn-blue:hover { box-shadow: 0 12px 30px rgba(59, 130, 246, 0.25); border-color: rgba(59, 130, 246, 0.4); }
+        .btn-blue .icon { color: #60a5fa; }
+
+        .btn-green:hover { box-shadow: 0 12px 30px rgba(163, 230, 53, 0.2); border-color: rgba(163, 230, 53, 0.4); }
+        .btn-green .icon { color: #a3e635; }
+
+        .btn-dark:hover { box-shadow: 0 12px 30px rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.3); }
+        .btn-dark .icon { color: #e2e8f0; }
+
+        /* الأنيميشن اللطيف للتحميل والخطأ */
+        .loading {
             color: #a3e635;
             font-size: 1.1rem;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .error-msg {
+            color: #f87171;
+            font-size: 1rem;
             padding: 30px;
-            animation: pulse 1.5s infinite;
+            background: rgba(248, 113, 113, 0.05);
+            border: 1px solid rgba(248, 113, 113, 0.1);
+            border-radius: 20px;
         }
 
-        /* الكي-فريمز للحركات */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
+        /* تعريف حركات الـ CSS */
+        @keyframes blurIn {
+            from { opacity: 0; filter: blur(10px); transform: scale(0.95); }
+            to { opacity: 1; filter: blur(0); transform: scale(1); }
+        }
+
+        @keyframes slideUpIn {
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
+        @keyframes drift {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -188,15 +231,13 @@
         </header>
 
         <main class="links-list" id="links-container">
-            <div class="loading"><i class="fa-solid fa-circle-notch fa-spin"></i> جاري تحميل الخدمات والعروض...</div>
+            <div class="loading"><i class="fa-solid fa-circle-notch fa-spin"></i> جاري تحميل الخدمات الفاخرة...</div>
         </main>
     </div>
 
     <script>
-        // ==========================================
-        // خطوة السيت أب: ضع معرف جدول البيانات الخاص بك هنا
-        // ==========================================
-const SPREADSHEET_ID = '1z1iYsSmwvCmUIGBoF8Wo9ZbmOafXebIa3krxa7wn0eM';        
+        // معرّف الجدول الخاص بك سليم ومحفوظ
+        const SPREADSHEET_ID = '1z1iYsSmwvCmUIGBoF8Wo9ZbmOafXebIa3krxa7wn0eM'; 
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
 
         async function fetchLinks() {
@@ -204,20 +245,18 @@ const SPREADSHEET_ID = '1z1iYsSmwvCmUIGBoF8Wo9ZbmOafXebIa3krxa7wn0eM';
                 const response = await fetch(url);
                 const text = await response.text();
                 
-                // تنظيف وفك شفرة البيانات القادمة من جوجل شيت تلقائياً
                 const jsonData = JSON.parse(text.substr(47).slice(0, -2));
                 const rows = jsonData.table.rows;
                 
                 const container = document.getElementById('links-container');
-                container.innerHTML = ''; // إزالة كلمة جاري التحميل
+                container.innerHTML = ''; 
 
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
 
-                let delay = 0; // متغير لعمل ظهور تتابعي جميل للأزرار
+                let delay = 0; 
 
                 rows.forEach(row => {
-                    // السيت أب التلقائي: قراءة الأعمدة بناءً على ترتيبها في الجدول
                     const title = row.c[0] ? row.c[0].v : '';
                     const subtitle = row.c[1] ? row.c[1].v : '';
                     const linkUrl = row.c[2] ? row.c[2].v : '#';
@@ -227,11 +266,9 @@ const SPREADSHEET_ID = '1z1iYsSmwvCmUIGBoF8Wo9ZbmOafXebIa3krxa7wn0eM';
                     const endDateStr = row.c[6] ? row.c[6].v : null;
                     const imageUrl = row.c[7] ? row.c[7].v : null;
 
-                    // نظام فحص جدولة التاريخ التلقائي
                     let shouldShow = true;
 
                     if (startDateStr) {
-                        // تحويل صيغة تاريخ جوجل شيت إلى صيغة يفهمها المتصفح
                         const startDate = new Date(startDateStr);
                         startDate.setHours(0, 0, 0, 0);
                         if (today < startDate) shouldShow = false;
@@ -243,11 +280,9 @@ const SPREADSHEET_ID = '1z1iYsSmwvCmUIGBoF8Wo9ZbmOafXebIa3krxa7wn0eM';
                         if (today > endDate) shouldShow = false;
                     }
 
-                    // إذا نجح الزر في الفحص ولم ينتهِ تاريخه، نقوم بعرضه وحركته
                     if (shouldShow && title) {
-                        delay += 0.15; // زيادة التوقيت لكل زر ليظهر بعد الذي قبله
+                        delay += 0.1; // سرعة تتابع مثالية ومريحة للعين
                         
-                        // اختيار إما أيقونة كلاسيكية أو الصورة المرفوعة من الجدول
                         const mediaHTML = imageUrl 
                             ? `<img src="${imageUrl}" class="btn-img" alt="${title}">` 
                             : `<i class="fa-solid ${iconName} icon"></i>`;
@@ -265,18 +300,16 @@ const SPREADSHEET_ID = '1z1iYsSmwvCmUIGBoF8Wo9ZbmOafXebIa3krxa7wn0eM';
                     }
                 });
 
-                // في حال عدم وجود عروض مفعلة اليوم
                 if (container.innerHTML === '') {
                     container.innerHTML = '<div class="error-msg">تابعونا قريباً لمعرفة أحدث خدماتنا وعروضنا الحصرية!</div>';
                 }
 
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('links-container').innerHTML = '<div class="error-msg">عذراً، تعذر تحديث البيانات حالياً.</div>';
+                document.getElementById('links-container').innerHTML = '<div class="error-msg"><i class="fa-solid fa-triangle-exclamation"></i> عذراً، تعذر تحديث الخدمات حالياً.</div>';
             }
         }
 
-        // تشغيل النظام تلقائياً
         fetchLinks();
     </script>
 </body>

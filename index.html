@@ -367,7 +367,6 @@
                 mouse.y = null;
             });
 
-            // كلاس الجزيئات المفردة
             class Particle {
                 constructor() {
                     this.x = Math.random() * canvas.width;
@@ -389,15 +388,12 @@
                 }
 
                 update() {
-                    // حركة خاملة انسيابية
                     this.x += this.vx;
                     this.y += this.vy;
 
-                    // الارتداد عند حواف الشاشة
                     if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
                     if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
 
-                    // تفاعل الجزيئات مع مؤشر الفأرة (الابتعاد والدفع الفيزيائي)
                     if (mouse.x != null && mouse.y != null) {
                         let dx = mouse.x - this.x;
                         let dy = mouse.y - this.y;
@@ -417,13 +413,11 @@
                 }
             }
 
-            // إنشاء الجزيئات
             const particleCount = Math.min(Math.floor(window.innerWidth / 15), 60);
             for (let i = 0; i < particleCount; i++) {
                 particles.push(new Particle());
             }
 
-            // رسم الخطوط والروابط بين الجزيئات المتقاربة
             function connect() {
                 let opacityValue = 1;
                 for (let a = 0; i = particles.length, a < i; a++) {
@@ -456,7 +450,6 @@
             animate();
         }
 
-        // === 🚀 تأثير حركة ثعبان الأكواد المتوهجة حول العنوان الرئيسي ===
         function initCodeSnake() {
             const pit = document.getElementById('snake-pit');
             if (!pit) return;
@@ -514,18 +507,31 @@
             }, 120);
         }
 
+        // دالة قراءة التواريخ المحمية للتعرف على مختلف الصيغ القادمة من جوجل شيت
         function parseGoogleSheetDate(dateVal) {
             if (!dateVal) return null;
             const str = dateVal.toString().trim();
+            
+            // 1. فحص صيغة جوجل شيت المدمجة Date(yyyy, m, d)
             const match = str.match(/Date\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+),\s*(\d+),\s*(\d+))?\)/);
             if (match) {
                 return new Date(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]));
             }
-            const parsed = new Date(str);
+            
+            // 2. فحص صيغة اليوم/الشهر/السنة الشائعة DD/MM/YYYY أو DD-MM-YYYY
+            const dmyMatch = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+            if (dmyMatch) {
+                const day = parseInt(dmyMatch[1]);
+                const month = parseInt(dmyMatch[2]) - 1; // تحويل الترتيب الصدري للأشهر
+                const year = parseInt(dmyMatch[3]);
+                return new Date(year, month, day);
+            }
+
+            // 3. المحاولة الاعتيادية المتوافقة مع المتصفحات
+            const parsed = new Date(str.replace(/\//g, '-'));
             return isNaN(parsed) ? null : parsed;
         }
 
-        // تأثير قراءة مصفوفة الألغاز عند التحميل
         function runLoaderSequence(onComplete) {
             const textEl = document.getElementById('decryption-text');
             const messages = [
@@ -591,6 +597,7 @@
 
                         let shouldShow = true;
 
+                        // تفعيل الفلترة والتحكم بالتواريخ تلقائياً
                         if (startDateStr) {
                             const startDate = parseGoogleSheetDate(startDateStr);
                             if (startDate) {
@@ -602,7 +609,7 @@
                         if (endDateStr) {
                             const endDate = parseGoogleSheetDate(endDateStr);
                             if (endDate) {
-                                endDate.setHours(0, 0, 0, 0);
+                                endDate.setHours(23, 59, 59, 999);
                                 if (today > endDate) shouldShow = false;
                             }
                         }
@@ -615,6 +622,9 @@
                                 ? `<img src="${imageUrl}" class="btn-img" alt="${title}">` 
                                 : `<i class="fa-solid ${iconName} icon"></i>`;
 
+                            // فحص وجود الرابط لعرضه كرابط أو كنص ممتد خالي من إعادة التحميل
+                            const isLinkValid = (linkUrl && linkUrl.toString().trim() !== "" && linkUrl.toString().trim() !== "#");
+                            
                             const cardHTML = `
                                 <div class="card-wrapper wrapper-${colorClass}" style="animation-delay: ${delay}s">
                                     <div class="hud-bracket bracket-tl"></div>
@@ -622,13 +632,13 @@
                                     <div class="hud-bracket bracket-bl"></div>
                                     <div class="hud-bracket bracket-br"></div>
                                     <div class="code-bg" id="${streamId}"></div>
-                                    <a href="${linkUrl}" class="link-btn">
+                                    <${isLinkValid ? `a href="${linkUrl}"` : 'div style="cursor: default;"'} class="link-btn">
                                         ${mediaHTML}
                                         <div class="btn-text">
                                             <span class="title">${title}</span>
                                             ${subtitle ? `<span class="subtitle">${subtitle}</span>` : ''}
                                         </div>
-                                    </a>
+                                    </${isLinkValid ? 'a' : 'div'}>
                                 </div>
                             `;
                             container.innerHTML += cardHTML;
@@ -651,7 +661,6 @@
             }
         }
 
-        // === 🚀 تأثير الميلان والعمق ثلاثي الأبعاد المطور (3D Interactive Game UI Depth) ===
         function add3DTiltEffect() {
             const wrappers = document.querySelectorAll('.card-wrapper');
             wrappers.forEach(wrapper => {
@@ -666,11 +675,9 @@
                     const angleX = -(y / (rect.height/2)) * 18; 
                     const angleY = (x / (rect.width/2)) * 18;
                     
-                    // تحريك الطبقة الخارجية
                     wrapper.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.04)`;
                     wrapper.style.boxShadow = `${-angleY * 1.5}px ${angleX * 1.5}px 40px rgba(0,0,0,0.9)`;
 
-                    // دفع العناصر الداخلية للخارج لعمل تأثير عمق Unity Parallax
                     innerElements.forEach(el => {
                         el.style.transform = `translateZ(55px) translateX(${x * 0.15}px) translateY(${y * 0.15}px)`;
                     });
@@ -687,7 +694,6 @@
             });
         }
 
-        // تشغيل الخلفية والبدء بالجلب المباشر للروابط
         initNeuralBackground();
         fetchLinks();
     </script>

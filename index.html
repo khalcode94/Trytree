@@ -3,19 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nafe3 Store | البوابة الرقمية المعتمدة</title>
+    <title>Nafe3 Store | البوابة الرقمية</title>
     
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Fira+Code:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --primary: #1e3a8a;
-            --primary-light: #3b82f6;
-            --accent-gold: #c5a880;
-            --bg-dark: #070a13;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --card-bg: rgba(10, 15, 30, 0.85);
+            --accent-gold: #e9d5ff;
+            --border-color: rgba(255, 255, 255, 0.12);
+            --card-bg: rgba(255, 255, 255, 0.06);
         }
 
         * {
@@ -26,10 +23,8 @@
         }
 
         body {
-            background-color: var(--bg-dark);
-            background-image: url('469171.jpg'); 
-            background-size: cover;
-            background-position: center;
+            /* التدرج اللوني البنفسجي المأخوذ من صورة الواجهة المرفقة */
+            background: linear-gradient(135deg, #7c7ecb 0%, #484196 50%, #2f2571 100%);
             background-attachment: fixed;
             min-height: 100vh;
             display: flex;
@@ -40,7 +35,7 @@
             perspective: 1500px;
         }
 
-        /* كانفاس تدفق البيانات الهندسي المنظم */
+        /* كانفاس الجزيئات الشبكية البيضاء المتناسقة مع طابع الزجاج */
         #particles-canvas {
             position: fixed;
             top: 0;
@@ -49,7 +44,7 @@
             height: 100%;
             z-index: 1;
             pointer-events: none;
-            opacity: 0.7;
+            opacity: 0.35;
         }
 
         .background-overlay {
@@ -58,86 +53,74 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, rgba(10, 15, 30, 0.9) 0%, rgba(5, 7, 15, 0.99) 100%);
+            background: rgba(47, 37, 113, 0.25);
             z-index: 2;
-        }
-
-        /* خطوط مصفوفة أمن البيانات الهادئة */
-        .scanlines {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(
-                rgba(18, 16, 16, 0) 50%, 
-                rgba(0, 0, 0, 0.15) 50%
-            );
-            background-size: 100% 6px;
-            z-index: 3;
             pointer-events: none;
-            opacity: 0.15;
         }
 
+        /* حاوية الكارت الزجاجي الكبير المطابق تماماً للصورة المرفقة */
         .container {
             position: relative;
             z-index: 4;
-            width: 100%;
-            max-width: 450px;
-            padding: 40px 16px;
+            width: 92%;
+            max-width: 440px;
+            margin: 40px auto;
+            padding: 40px 24px;
             text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+            animation: springSpawn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        @media (min-width: 640px) { .container { padding: 60px 20px; } }
 
-        /* ترويسة التحقق الأمني العلوي (Enterprise HUD) */
+        /* ترويسة التحقق الآمن مدمجة كحبة زجاجية أنيقة */
         .security-handshake-bar {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 30px;
             padding: 6px 14px;
             font-size: 10px;
             font-family: 'Fira Code', monospace;
-            color: var(--accent-gold);
+            color: rgba(255, 255, 255, 0.85);
             display: inline-flex;
             align-items: center;
             gap: 8px;
             margin-bottom: 24px;
             letter-spacing: 0.5px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         .security-dot {
             width: 7px;
             height: 7px;
-            background-color: #10b981;
+            background-color: #06b6d4;
             border-radius: 50%;
-            box-shadow: 0 0 8px #10b981;
+            box-shadow: 0 0 8px #06b6d4;
             animation: pulse-secure 1.5s infinite;
         }
 
-        /* رأس الصفحة الفاخر */
+        /* رأس الصفحة */
         .profile-header {
             position: relative;
-            margin-bottom: 36px;
-            padding: 20px 10px;
-            animation: springSpawn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            margin-bottom: 30px;
             transform-style: preserve-3d;
         }
 
         .store-name {
-            position: relative;
-            z-index: 2;
             font-size: 2.1rem;
             color: #ffffff; 
             font-weight: 900;
             margin-bottom: 8px;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            text-shadow: 0 4px 10px rgba(0,0,0,0.15);
             line-height: 1.2;
             letter-spacing: -0.5px;
         }
-        @media (min-width: 480px) { .store-name { font-size: 2.8rem; } }
+        @media (min-width: 480px) { .store-name { font-size: 2.6rem; } }
 
         .store-bio {
-            position: relative;
-            z-index: 2;
             font-size: 0.85rem;
-            color: #64748b;
+            color: rgba(255, 255, 255, 0.6);
             font-family: 'Fira Code', monospace;
             font-weight: 500;
             letter-spacing: 0.5px;
@@ -148,60 +131,42 @@
             flex-direction: column;
             gap: 16px;
         }
-        @media (min-width: 640px) { .links-list { gap: 20px; } }
 
-        /* كارت الربط المؤسسي (Enterprise Premium Card) */
+        /* كارت الروابط الزجاجي البلوري المصمم كحقول الصورة */
         .card-wrapper {
             position: relative;
             border-radius: 16px;
-            padding: 1.5px;
+            padding: 1px;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.02);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+            background: rgba(255, 255, 255, 0.04);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             opacity: 0;
-            transform: scale(0.9) translateY(40px) rotateX(-15deg);
+            transform: scale(0.92) translateY(30px) rotateX(-10deg);
             animation: cardEntranceSpring 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             transition: transform 0.1s ease-out, box-shadow 0.3s ease;
             transform-style: preserve-3d;
         }
 
-        .card-wrapper::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(transparent, var(--glow-color, var(--accent-gold)), transparent 35%);
-            animation: rotateBorder 5s linear infinite;
-            z-index: 1;
-        }
-
-        .card-wrapper:hover::before {
-            animation-duration: 2.5s;
-        }
-
-        /* حدود التحديد المؤسسية الهادئة */
+        /* زوايا الزجاج الراقية */
         .hud-bracket {
             position: absolute;
             width: 8px;
             height: 8px;
-            border-color: var(--glow-color, var(--accent-gold));
+            border-color: rgba(255, 255, 255, 0.15);
             border-style: solid;
             z-index: 10;
-            opacity: 0.25;
+            opacity: 0.4;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .bracket-tl { top: 8px; left: 8px; border-width: 1.5px 0 0 1.5px; border-top-left-radius: 4px; }
-        .bracket-tr { top: 8px; right: 8px; border-width: 1.5px 1.5px 0 0; border-top-right-radius: 4px; }
-        .bracket-bl { bottom: 8px; left: 8px; border-width: 0 0 1.5px 1.5px; border-bottom-left-radius: 4px; }
-        .bracket-br { bottom: 8px; right: 8px; border-width: 0 1.5px 1.5px 0; border-bottom-right-radius: 4px; }
+        .bracket-tl { top: 8px; left: 8px; border-width: 1px 0 0 1px; border-top-left-radius: 4px; }
+        .bracket-tr { top: 8px; right: 8px; border-width: 1px 1px 0 0; border-top-right-radius: 4px; }
+        .bracket-bl { bottom: 8px; left: 8px; border-width: 0 0 1px 1px; border-bottom-left-radius: 4px; }
+        .bracket-br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; border-bottom-right-radius: 4px; }
 
         .card-wrapper:hover .hud-bracket {
-            opacity: 0.8;
+            opacity: 0.9;
+            border-color: var(--glow-color, rgba(255,255,255,0.4));
             transform: scale(1.05);
-            width: 12px;
-            height: 12px;
         }
 
         .code-bg {
@@ -212,8 +177,8 @@
             height: 100%;
             font-family: 'Fira Code', monospace;
             font-size: 9px;
-            color: var(--glow-color, var(--accent-gold));
-            opacity: 0.04;
+            color: #ffffff;
+            opacity: 0.02;
             overflow: hidden;
             white-space: nowrap;
             pointer-events: none;
@@ -221,29 +186,27 @@
             text-align: left;
             padding: 5px;
             z-index: 2;
-            transition: opacity 0.3s;
         }
-        .card-wrapper:hover .code-bg { opacity: 0.08; }
 
+        /* الزر التفاعلي */
         .link-btn {
             position: relative;
             display: flex;
             align-items: center;
             padding: 15px 18px;
-            border-radius: 14px;
+            border-radius: 15px;
             text-decoration: none;
             color: white;
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.06);
             width: 100%;
             height: 100%;
             z-index: 3;
             transition: background 0.3s;
             transform-style: preserve-3d;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        @media (min-width: 640px) { .link-btn { padding: 18px 24px; border-radius: 15px; } }
 
-        .link-btn:hover { background: rgba(14, 21, 40, 0.95); }
+        .link-btn:hover { background: rgba(255, 255, 255, 0.14); }
         .icon, .btn-img, .btn-text { transform: translateZ(25px); transition: transform 0.25s ease; }
 
         .icon {
@@ -261,50 +224,64 @@
             border-radius: 10px;
             margin-left: 14px;
             object-fit: cover;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
         }
         @media (min-width: 640px) { .btn-img { width: 44px; height: 44px; margin-left: 18px; } }
 
         .btn-text { display: flex; flex-direction: column; text-align: right; flex-grow: 1; }
-        .btn-text .title { font-size: 1rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); letter-spacing: -0.2px; }
+        .btn-text .title { font-size: 1rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.15); letter-spacing: -0.2px; }
         @media (min-width: 640px) { .btn-text .title { font-size: 1.1rem; } }
-        .btn-text .subtitle { font-size: 0.75rem; color: #64748b; margin-top: 3px; transition: color 0.3s; }
+        .btn-text .subtitle { font-size: 0.75rem; color: rgba(255, 255, 255, 0.5); margin-top: 3px; transition: color 0.3s; }
         @media (min-width: 640px) { .btn-text .subtitle { font-size: 0.8rem; } }
 
-        /* تدرجات الفخامة والألوان المؤسسية المعتمدة */
-        .wrapper-purple { --glow-color: #818cf8; color: #a5b4fc; } /* Indigo Executive */
-        .wrapper-blue   { --glow-color: #38bdf8; color: #7dd3fc; } /* Deep Cobalt */
-        .wrapper-green  { --glow-color: #34d399; color: #6ee7b7; } /* Trust Emerald */
-        .wrapper-dark   { --glow-color: var(--accent-gold); color: #f3f4f6; } /* Executive Gold */
+        /* الألوان والنيون المخصص المتناسق مع أزرار الإدخال والـ Sign In بالصورة */
+        .wrapper-purple { --glow-color: #c084fc; color: #f3e8ff; }
+        
+        /* التدرج اللوني للأزرق والسايان المطابق تماماً لزر Sign In في الصورة المرفقة */
+        .wrapper-blue { 
+            --glow-color: #60a5fa; 
+            color: #ffffff; 
+        }
+        .wrapper-blue .link-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            border-color: rgba(255,255,255,0.15);
+        }
+        .wrapper-blue .link-btn:hover {
+            background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+        }
+        .wrapper-blue .subtitle {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
 
-        .link-btn:hover .subtitle { color: #cbd5e1; }
+        .wrapper-green  { --glow-color: #34d399; color: #ecfdf5; }
+        .wrapper-dark   { --glow-color: rgba(255,255,255,0.3); color: #f9fafb; }
 
-        /* محاكي فحص الأمان وبناء القناة آمنة */
+        .link-btn:hover .subtitle { color: #ffffff; }
+
+        /* شاشة التحميل الجذابة */
         .hud-loader {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 50px 20px;
-            color: var(--accent-gold);
+            color: rgba(255, 255, 255, 0.85);
             font-family: 'Fira Code', monospace;
             font-size: 0.85rem;
         }
         .decryption-wheel {
             width: 38px;
             height: 38px;
-            border: 2px solid rgba(197, 168, 128, 0.1);
-            border-top: 2px solid var(--accent-gold);
-            border-right: 2px solid var(--accent-gold);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top: 2px solid #ffffff;
+            border-right: 2px solid #ffffff;
             border-radius: 50%;
             margin-bottom: 16px;
         }
 
-        @keyframes rotateBorder { 100% { transform: rotate(360deg); } }
-        
         @keyframes cardEntranceSpring {
-            0% { opacity: 0; transform: scale(0.92) translateY(30px) rotateX(-10deg); filter: blur(3px) brightness(0.5); }
-            100% { opacity: 1; transform: scale(1) translateY(0) rotateX(0); filter: blur(0) brightness(1); }
+            0% { opacity: 0; transform: scale(0.92) translateY(30px) rotateX(-10deg); filter: blur(3px); }
+            100% { opacity: 1; transform: scale(1) translateY(0) rotateX(0); filter: blur(0); }
         }
 
         @keyframes springSpawn {
@@ -314,7 +291,7 @@
 
         @keyframes pulse-secure {
             0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 12px #10b981; }
+            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 12px #06b6d4; }
         }
 
         .error-msg { color: #f87171; font-size: 0.9rem; padding: 30px; font-weight: bold; font-family: 'Fira Code', monospace; }
@@ -322,23 +299,25 @@
 </head>
 <body>
 
-    <!-- شبكة الجزيئات الهندسية المنظمة -->
     <canvas id="particles-canvas"></canvas>
     <div class="background-overlay"></div>
-    <div class="scanlines"></div>
 
     <div class="container">
-
+        <!-- ترويسة التحقق الآمن بلورية المظهر كإعدادات نظام الأندرويد والـ iOS -->
+        <div class="security-handshake-bar">
+            <span class="security-dot"></span>
+            <span>SECURE SYSTEM INTERFACE ACTIVE</span>
+        </div>
 
         <header class="profile-header" id="main-header">
-            <h1 class="store-name" id="dynamic-store-name">GATEWAY_LOADING</h1>
-            <p class="store-bio" id="dynamic-store-bio">// CONNECTING_TO_SECURE_NODES</p>
+            <h1 class="store-name" id="dynamic-store-name">SYSTEM_INIT</h1>
+            <p class="store-bio" id="dynamic-store-bio">// LINKING_DATA_STREAM</p>
         </header>
 
         <main class="links-list" id="links-container">
             <div class="hud-loader">
                 <div class="decryption-wheel spin"></div>
-                <div id="decryption-text">&gt; SYSTEM_READY_CONNECTING_</div>
+                <div id="decryption-text">&gt; ESTABLISHING_SECURE_CONNECTION_</div>
             </div>
         </main>
     </div>
@@ -347,7 +326,7 @@
         const SPREADSHEET_ID = '1z1iYsSmwvCmUIGBoF8Wo9ZbmOafXebIa3krxa7wn0eM'; 
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
 
-        // === 🚀 شبكة جزيئات التدفق السحابية المنسقة والمنتظمة (Corporate Cloud Grid) ===
+        // === 🚀 شبكة جزيئات التدفق السحابية باللون الأبيض شبه الشفاف لتلائم الزجاج المصقول ===
         function initNeuralBackground() {
             const canvas = document.getElementById('particles-canvas');
             if (!canvas) return;
@@ -377,14 +356,13 @@
                     this.x = Math.random() * canvas.width;
                     this.y = Math.random() * canvas.height;
                     this.size = Math.random() * 1.5 + 1;
-                    this.vx = (Math.random() * 0.4 - 0.2); // سرعة فائقة الهدوء للشركات
+                    this.vx = (Math.random() * 0.4 - 0.2); 
                     this.vy = (Math.random() * 0.4 - 0.2);
                     this.density = (Math.random() * 20) + 10;
                 }
 
                 draw() {
-                    // لون بلاتيني مائل للذهبي والأزرق الهادئ
-                    ctx.fillStyle = 'rgba(197, 168, 128, 0.25)';
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                     ctx.closePath();
@@ -432,8 +410,7 @@
 
                         if (distance < 120) {
                             opacityValue = 1 - (distance / 120);
-                            // خطوط اتصال بلاتينية خفيفة جداً
-                            ctx.strokeStyle = `rgba(197, 168, 128, ${opacityValue * 0.12})`;
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${opacityValue * 0.12})`;
                             ctx.lineWidth = 0.8;
                             ctx.beginPath();
                             ctx.moveTo(particles[a].x, particles[a].y);
@@ -491,15 +468,14 @@
             return isNaN(parsed) ? null : parsed;
         }
 
-        // لوحة فحص التراخيص وبناء الاتصال الآمن مع قواعد البيانات
         function runLoaderSequence(onComplete) {
             const textEl = document.getElementById('decryption-text');
             const messages = [
-                "> GATEWAY: INITIALIZING SECURE HANDSHAKE...",
-                "> SSL: SECURE HOST PROTOCOL CONNECTED",
-                "> DATA: DECRYPTING CONFIGURATION MATRICES...",
+                "> CONFIG: ESTABLISHING SECURE GATEWAY...",
                 "> SECURITY: SYSTEM VALIDATION GRANTED",
-                "> PORTAL: LOAD_SUCCESSFUL"
+                "> RETRIEVING DATA PACKETS...",
+                "> DECRYPTING FILE MATRICES...",
+                "> PORTAL INITIALIZED SUCCESSFULLY"
             ];
             let i = 0;
             const interval = setInterval(() => {
@@ -605,7 +581,7 @@
                     });
 
                     if (container.innerHTML === '') {
-                        container.innerHTML = '<div class="error-msg">> ERROR: NO_CHANNELS_ACTIVE</div>';
+                        container.innerHTML = '<div class="error-msg">> ERROR: SYSTEM_PORTAL_EMPTY</div>';
                     }
 
                     add3DTiltEffect();
@@ -613,11 +589,11 @@
 
             } catch (error) {
                 console.error(error);
-                document.getElementById('links-container').innerHTML = '<div class="error-msg">> GATEWAY_REJECTED_CONNECTION_FAIL</div>';
+                document.getElementById('links-container').innerHTML = '<div class="error-msg">> ACCESS_REJECTED_BY_SERVER</div>';
             }
         }
 
-        // تأثير الإمالة المؤسسي الهادئ وعمق العزل الرخامي
+        // تأثير الإمالة والمحاذاة ثلاثية الأبعاد المرنة للزجاج المصقول
         function add3DTiltEffect() {
             const wrappers = document.querySelectorAll('.card-wrapper');
             wrappers.forEach(wrapper => {
@@ -628,11 +604,11 @@
                     const x = e.clientX - rect.left - (rect.width/2);
                     const y = e.clientY - rect.top - (rect.height/2);
                     
-                    const angleX = -(y / (rect.height/2)) * 12; // إمالة متزنة ومحسوبة تناسب الشركات
+                    const angleX = -(y / (rect.height/2)) * 12; 
                     const angleY = (x / (rect.width/2)) * 12;
                     
                     wrapper.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.025)`;
-                    wrapper.style.boxShadow = `${-angleY}px ${angleX}px 30px rgba(0,0,0,0.7)`;
+                    wrapper.style.boxShadow = `${-angleY}px ${angleX}px 30px rgba(0,0,0,0.4)`;
 
                     innerElements.forEach(el => {
                         el.style.transform = `translateZ(30px) translateX(${x * 0.08}px) translateY(${y * 0.08}px)`;
@@ -641,7 +617,7 @@
                 
                 wrapper.addEventListener('mouseleave', () => {
                     wrapper.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
-                    wrapper.style.boxShadow = `0 12px 30px rgba(0,0,0,0.6)`;
+                    wrapper.style.boxShadow = `0 8px 24px rgba(0,0,0,0.1)`;
                     
                     innerElements.forEach(el => {
                         el.style.transform = `translateZ(0) translateX(0) translateY(0)`;

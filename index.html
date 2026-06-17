@@ -3,12 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nafe3 Store | نافع ستور</title>
+    <title>Nafe3 Store | البوابة الرقمية المعتمدة</title>
     
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Fira+Code:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Fira+Code:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --accent-gold: #c5a880;
+            --bg-dark: #070a13;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --card-bg: rgba(10, 15, 30, 0.85);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -17,7 +26,7 @@
         }
 
         body {
-            background-color: #020204;
+            background-color: var(--bg-dark);
             background-image: url('469171.jpg'); 
             background-size: cover;
             background-position: center;
@@ -28,10 +37,10 @@
             align-items: flex-start;
             color: #ffffff;
             overflow-x: hidden;
-            perspective: 1200px;
+            perspective: 1500px;
         }
 
-        /* حاوية الخلفية الحية للجزيئات */
+        /* كانفاس تدفق البيانات الهندسي المنظم */
         #particles-canvas {
             position: fixed;
             top: 0;
@@ -40,6 +49,7 @@
             height: 100%;
             z-index: 1;
             pointer-events: none;
+            opacity: 0.7;
         }
 
         .background-overlay {
@@ -48,110 +58,109 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, rgba(3, 3, 5, 0.75) 0%, rgba(1, 1, 2, 0.98) 100%);
+            background: radial-gradient(circle at center, rgba(10, 15, 30, 0.9) 0%, rgba(5, 7, 15, 0.99) 100%);
             z-index: 2;
         }
 
-        /* خطوط المسح الهولوجرامية */
+        /* خطوط مصفوفة أمن البيانات الهادئة */
         .scanlines {
             position: fixed;
             inset: 0;
             background: linear-gradient(
                 rgba(18, 16, 16, 0) 50%, 
-                rgba(0, 0, 0, 0.25) 50%
+                rgba(0, 0, 0, 0.15) 50%
             );
-            background-size: 100% 4px;
+            background-size: 100% 6px;
             z-index: 3;
             pointer-events: none;
-            opacity: 0.4;
+            opacity: 0.15;
         }
 
         .container {
             position: relative;
             z-index: 4;
             width: 100%;
-            max-width: 440px;
+            max-width: 450px;
             padding: 40px 16px;
             text-align: center;
         }
         @media (min-width: 640px) { .container { padding: 60px 20px; } }
 
-        /* رأس الصفحة السينمائي */
+        /* ترويسة التحقق الأمني العلوي (Enterprise HUD) */
+        .security-handshake-bar {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            padding: 6px 14px;
+            font-size: 10px;
+            font-family: 'Fira Code', monospace;
+            color: var(--accent-gold);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .security-dot {
+            width: 7px;
+            height: 7px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse-secure 1.5s infinite;
+        }
+
+        /* رأس الصفحة الفاخر */
         .profile-header {
             position: relative;
-            margin-bottom: 40px;
-            padding: 30px 10px;
-            animation: springSpawn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            margin-bottom: 36px;
+            padding: 20px 10px;
+            animation: springSpawn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             transform-style: preserve-3d;
-        }
-
-        .snake-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .snake-segment {
-            position: absolute;
-            font-family: 'Fira Code', monospace;
-            font-size: 14px;
-            font-weight: bold;
-            color: #a3e635;
-            text-shadow: 0 0 8px #a3e635, 0 0 15px #a3e635;
-            opacity: 0;
-            transition: all 0.05s linear;
         }
 
         .store-name {
             position: relative;
             z-index: 2;
-            font-size: 2.3rem;
+            font-size: 2.1rem;
             color: #ffffff; 
             font-weight: 900;
             margin-bottom: 8px;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            text-shadow: 0 4px 15px rgba(0,0,0,0.5);
             line-height: 1.2;
-            transition: all 0.3s;
+            letter-spacing: -0.5px;
         }
-        @media (min-width: 480px) { .store-name { font-size: 3.2rem; } }
-
-        /* تأثير التشتيت والانحراف اللوني النيون عند تمرير الماوس */
-        .store-name:hover {
-            animation: glitchEffect 0.3s infinite;
-            cursor: pointer;
-        }
+        @media (min-width: 480px) { .store-name { font-size: 2.8rem; } }
 
         .store-bio {
             position: relative;
             z-index: 2;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: #64748b;
             font-family: 'Fira Code', monospace;
-            letter-spacing: 1px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
 
         .links-list {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
         }
-        @media (min-width: 640px) { .links-list { gap: 24px; } }
+        @media (min-width: 640px) { .links-list { gap: 20px; } }
 
-        /* بطاقة المحاذاة ثلاثية الأبعاد (Game HUD Card Style) */
+        /* كارت الربط المؤسسي (Enterprise Premium Card) */
         .card-wrapper {
             position: relative;
-            border-radius: 20px;
-            padding: 2px;
+            border-radius: 16px;
+            padding: 1.5px;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.01);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            background: rgba(255, 255, 255, 0.02);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
             opacity: 0;
-            transform: scale(0.85) translateY(50px) rotateX(-20deg);
-            animation: cardEntranceSpring 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            transform: scale(0.9) translateY(40px) rotateX(-15deg);
+            animation: cardEntranceSpring 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             transition: transform 0.1s ease-out, box-shadow 0.3s ease;
             transform-style: preserve-3d;
         }
@@ -163,38 +172,36 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(transparent, var(--glow-color, #a3e635), transparent 30%);
-            animation: rotateBorder 4s linear infinite;
+            background: conic-gradient(transparent, var(--glow-color, var(--accent-gold)), transparent 35%);
+            animation: rotateBorder 5s linear infinite;
             z-index: 1;
         }
 
-        /* تسريع دوران النيون والتوهج عند التمرير */
         .card-wrapper:hover::before {
-            animation-duration: 1.5s;
-            background: conic-gradient(transparent, var(--glow-color, #a3e635), transparent 45%, var(--glow-color, #a3e635));
+            animation-duration: 2.5s;
         }
 
-        /* زوايا هولوجرامية تقنية HUD Brackets */
+        /* حدود التحديد المؤسسية الهادئة */
         .hud-bracket {
             position: absolute;
-            width: 12px;
-            height: 12px;
-            border-color: var(--glow-color, #a3e635);
+            width: 8px;
+            height: 8px;
+            border-color: var(--glow-color, var(--accent-gold));
             border-style: solid;
             z-index: 10;
-            opacity: 0.3;
-            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            opacity: 0.25;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .bracket-tl { top: 10px; left: 10px; border-width: 2px 0 0 2px; border-top-left-radius: 6px; }
-        .bracket-tr { top: 10px; right: 10px; border-width: 2px 2px 0 0; border-top-right-radius: 6px; }
-        .bracket-bl { bottom: 10px; left: 10px; border-width: 0 0 2px 2px; border-bottom-left-radius: 6px; }
-        .bracket-br { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; border-bottom-right-radius: 6px; }
+        .bracket-tl { top: 8px; left: 8px; border-width: 1.5px 0 0 1.5px; border-top-left-radius: 4px; }
+        .bracket-tr { top: 8px; right: 8px; border-width: 1.5px 1.5px 0 0; border-top-right-radius: 4px; }
+        .bracket-bl { bottom: 8px; left: 8px; border-width: 0 0 1.5px 1.5px; border-bottom-left-radius: 4px; }
+        .bracket-br { bottom: 8px; right: 8px; border-width: 0 1.5px 1.5px 0; border-bottom-right-radius: 4px; }
 
         .card-wrapper:hover .hud-bracket {
-            opacity: 1;
-            transform: scale(1.15);
-            width: 16px;
-            height: 16px;
+            opacity: 0.8;
+            transform: scale(1.05);
+            width: 12px;
+            height: 12px;
         }
 
         .code-bg {
@@ -204,9 +211,9 @@
             width: 100%;
             height: 100%;
             font-family: 'Fira Code', monospace;
-            font-size: 10px;
-            color: var(--glow-color, #a3e635);
-            opacity: 0.08;
+            font-size: 9px;
+            color: var(--glow-color, var(--accent-gold));
+            opacity: 0.04;
             overflow: hidden;
             white-space: nowrap;
             pointer-events: none;
@@ -216,124 +223,126 @@
             z-index: 2;
             transition: opacity 0.3s;
         }
-        .card-wrapper:hover .code-bg { opacity: 0.16; }
+        .card-wrapper:hover .code-bg { opacity: 0.08; }
 
         .link-btn {
             position: relative;
             display: flex;
             align-items: center;
-            padding: 16px 20px;
-            border-radius: 18px;
+            padding: 15px 18px;
+            border-radius: 14px;
             text-decoration: none;
             color: white;
-            background: #06060a;
+            background: var(--card-bg);
             width: 100%;
             height: 100%;
             z-index: 3;
             transition: background 0.3s;
             transform-style: preserve-3d;
+            border: 1px solid rgba(255, 255, 255, 0.03);
         }
-        @media (min-width: 640px) { .link-btn { padding: 18px 24px; } }
+        @media (min-width: 640px) { .link-btn { padding: 18px 24px; border-radius: 15px; } }
 
-        .link-btn:hover { background: #0c0c14; }
-        .icon, .btn-img, .btn-text { transform: translateZ(30px); transition: transform 0.2s ease; }
+        .link-btn:hover { background: rgba(14, 21, 40, 0.95); }
+        .icon, .btn-img, .btn-text { transform: translateZ(25px); transition: transform 0.25s ease; }
 
         .icon {
-            font-size: 1.5rem;
-            margin-left: 16px;
-            width: 32px;
+            font-size: 1.35rem;
+            margin-left: 14px;
+            width: 28px;
             text-align: center;
-            text-shadow: 0 0 12px currentColor;
+            text-shadow: 0 0 8px currentColor;
         }
-        @media (min-width: 640px) { .icon { font-size: 1.6rem; margin-left: 20px; } }
+        @media (min-width: 640px) { .icon { font-size: 1.5rem; margin-left: 18px; } }
 
         .btn-img {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            margin-left: 16px;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            margin-left: 14px;
             object-fit: cover;
             border: 1px solid rgba(255,255,255,0.1);
         }
-        @media (min-width: 640px) { .btn-img { width: 46px; height: 46px; margin-left: 20px; } }
+        @media (min-width: 640px) { .btn-img { width: 44px; height: 44px; margin-left: 18px; } }
 
         .btn-text { display: flex; flex-direction: column; text-align: right; flex-grow: 1; }
-        .btn-text .title { font-size: 1.05rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        @media (min-width: 640px) { .btn-text .title { font-size: 1.15rem; } }
-        .btn-text .subtitle { font-size: 0.8rem; color: #64748b; margin-top: 4px; transition: color 0.3s; }
-        @media (min-width: 640px) { .btn-text .subtitle { font-size: 0.85rem; } }
+        .btn-text .title { font-size: 1rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); letter-spacing: -0.2px; }
+        @media (min-width: 640px) { .btn-text .title { font-size: 1.1rem; } }
+        .btn-text .subtitle { font-size: 0.75rem; color: #64748b; margin-top: 3px; transition: color 0.3s; }
+        @media (min-width: 640px) { .btn-text .subtitle { font-size: 0.8rem; } }
 
-        /* تباينات ألوان النيون للبطاقات */
-        .wrapper-purple { --glow-color: #c084fc; color: #c084fc; }
-        .wrapper-blue   { --glow-color: #60a5fa; color: #60a5fa; }
-        .wrapper-green  { --glow-color: #a3e635; color: #a3e635; }
-        .wrapper-dark   { --glow-color: #64748b; color: #e2e8f0; }
+        /* تدرجات الفخامة والألوان المؤسسية المعتمدة */
+        .wrapper-purple { --glow-color: #818cf8; color: #a5b4fc; } /* Indigo Executive */
+        .wrapper-blue   { --glow-color: #38bdf8; color: #7dd3fc; } /* Deep Cobalt */
+        .wrapper-green  { --glow-color: #34d399; color: #6ee7b7; } /* Trust Emerald */
+        .wrapper-dark   { --glow-color: var(--accent-gold); color: #f3f4f6; } /* Executive Gold */
 
-        .link-btn:hover .subtitle { color: #e2e8f0; }
+        .link-btn:hover .subtitle { color: #cbd5e1; }
 
-        /* شاشة التحميل التقنية */
+        /* محاكي فحص الأمان وبناء القناة آمنة */
         .hud-loader {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 60px 20px;
-            color: #a3e635;
+            padding: 50px 20px;
+            color: var(--accent-gold);
             font-family: 'Fira Code', monospace;
-            font-size: 1rem;
+            font-size: 0.85rem;
         }
         .decryption-wheel {
-            width: 44px;
-            height: 44px;
-            border: 3px solid rgba(163, 230, 53, 0.1);
-            border-top: 3px solid #a3e635;
-            border-right: 3px solid #a3e635;
+            width: 38px;
+            height: 38px;
+            border: 2px solid rgba(197, 168, 128, 0.1);
+            border-top: 2px solid var(--accent-gold);
+            border-right: 2px solid var(--accent-gold);
             border-radius: 50%;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
-        /* الحركات ثلاثية الأبعاد والفيزيائية */
         @keyframes rotateBorder { 100% { transform: rotate(360deg); } }
         
         @keyframes cardEntranceSpring {
-            0% { opacity: 0; transform: scale(0.8) translateY(60px) rotateX(-25deg); filter: blur(5px) brightness(0.3); }
+            0% { opacity: 0; transform: scale(0.92) translateY(30px) rotateX(-10deg); filter: blur(3px) brightness(0.5); }
             100% { opacity: 1; transform: scale(1) translateY(0) rotateX(0); filter: blur(0) brightness(1); }
         }
 
         @keyframes springSpawn {
-            0% { opacity: 0; transform: scale(0.7) translateY(-40px); filter: blur(10px); }
-            70% { transform: scale(1.05) translateY(5px); }
+            0% { opacity: 0; transform: scale(0.95) translateY(-20px); filter: blur(5px); }
             100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
         }
 
-        @keyframes glitchEffect {
-            0% { text-shadow: 3px -1px 0 #ea580c, -2px 2px 0 #10b981, 0 0 10px rgba(255,255,255,0.2); }
-            40% { text-shadow: -3px 2px 0 #ea580c, 3px -2px 0 #10b981, 0 0 15px rgba(255,255,255,0.4); }
-            80% { text-shadow: 2px -2px 0 #ea580c, -1px 3px 0 #10b981, 0 0 10px rgba(255,255,255,0.2); }
-            100% { text-shadow: -1px -3px 0 #ea580c, 2px -1px 0 #10b981, 0 0 8px rgba(255,255,255,0.1); }
+        @keyframes pulse-secure {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 12px #10b981; }
         }
 
-        .error-msg { color: #f87171; font-size: 1rem; padding: 30px; font-weight: bold; font-family: 'Fira Code', monospace; }
+        .error-msg { color: #f87171; font-size: 0.9rem; padding: 30px; font-weight: bold; font-family: 'Fira Code', monospace; }
     </style>
 </head>
 <body>
 
-    <!-- كانفاس حركة الجزيئات الفيزيائية الخلفية -->
+    <!-- شبكة الجزيئات الهندسية المنظمة -->
     <canvas id="particles-canvas"></canvas>
     <div class="background-overlay"></div>
     <div class="scanlines"></div>
 
     <div class="container">
+        <!-- ترويسة التحقق وحماية الاتصال المشفر للشركات -->
+        <div class="security-handshake-bar">
+            <span class="security-dot"></span>
+            <span>SECURE GATEWAY: CLOUD_ENCRYPT_ACTIVE_V4</span>
+        </div>
+
         <header class="profile-header" id="main-header">
-            <div class="snake-container" id="snake-pit"></div>
-            <h1 class="store-name" id="dynamic-store-name">SYSTEM_INIT</h1>
-            <p class="store-bio" id="dynamic-store-bio">// LINKING_DATA_STREAM</p>
+            <h1 class="store-name" id="dynamic-store-name">GATEWAY_LOADING</h1>
+            <p class="store-bio" id="dynamic-store-bio">// CONNECTING_TO_SECURE_NODES</p>
         </header>
 
         <main class="links-list" id="links-container">
             <div class="hud-loader">
                 <div class="decryption-wheel spin"></div>
-                <div id="decryption-text">&gt; SECURE_STREAM_CONNECT_</div>
+                <div id="decryption-text">&gt; SYSTEM_READY_CONNECTING_</div>
             </div>
         </main>
     </div>
@@ -342,13 +351,13 @@
         const SPREADSHEET_ID = '1z1iYsSmwvCmUIGBoF8Wo9ZbmOafXebIa3krxa7wn0eM'; 
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
 
-        // === 🚀 نظام شبكة الجزيئات والترابط الفيزيائي الخلفي (Unity Particles Style) ===
+        // === 🚀 شبكة جزيئات التدفق السحابية المنسقة والمنتظمة (Corporate Cloud Grid) ===
         function initNeuralBackground() {
             const canvas = document.getElementById('particles-canvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
             let particles = [];
-            let mouse = { x: null, y: null, radius: 100 };
+            let mouse = { x: null, y: null, radius: 120 };
 
             function resizeCanvas() {
                 canvas.width = window.innerWidth;
@@ -371,16 +380,15 @@
                 constructor() {
                     this.x = Math.random() * canvas.width;
                     this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 2 + 1;
-                    this.baseX = this.x;
-                    this.baseY = this.y;
-                    this.density = (Math.random() * 30) + 15;
-                    this.vx = (Math.random() * 1 - 0.5) * 0.5;
-                    this.vy = (Math.random() * 1 - 0.5) * 0.5;
+                    this.size = Math.random() * 1.5 + 1;
+                    this.vx = (Math.random() * 0.4 - 0.2); // سرعة فائقة الهدوء للشركات
+                    this.vy = (Math.random() * 0.4 - 0.2);
+                    this.density = (Math.random() * 20) + 10;
                 }
 
                 draw() {
-                    ctx.fillStyle = 'rgba(163, 230, 53, 0.45)';
+                    // لون بلاتيني مائل للذهبي والأزرق الهادئ
+                    ctx.fillStyle = 'rgba(197, 168, 128, 0.25)';
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                     ctx.closePath();
@@ -403,8 +411,8 @@
                             let forceDirectionY = dy / distance;
                             let maxDistance = mouse.radius;
                             let force = (maxDistance - distance) / maxDistance;
-                            let directionX = forceDirectionX * force * this.density * 0.4;
-                            let directionY = forceDirectionY * force * this.density * 0.4;
+                            let directionX = forceDirectionX * force * this.density * 0.2;
+                            let directionY = forceDirectionY * force * this.density * 0.2;
                             this.x -= directionX;
                             this.y -= directionY;
                         }
@@ -413,7 +421,7 @@
                 }
             }
 
-            const particleCount = Math.min(Math.floor(window.innerWidth / 15), 60);
+            const particleCount = Math.min(Math.floor(window.innerWidth / 20), 45);
             for (let i = 0; i < particleCount; i++) {
                 particles.push(new Particle());
             }
@@ -426,10 +434,11 @@
                         let dy = particles[a].y - particles[b].y;
                         let distance = Math.sqrt(dx * dx + dy * dy);
 
-                        if (distance < 110) {
-                            opacityValue = 1 - (distance / 110);
-                            ctx.strokeStyle = `rgba(163, 230, 53, ${opacityValue * 0.22})`;
-                            ctx.lineWidth = 1;
+                        if (distance < 120) {
+                            opacityValue = 1 - (distance / 120);
+                            // خطوط اتصال بلاتينية خفيفة جداً
+                            ctx.strokeStyle = `rgba(197, 168, 128, ${opacityValue * 0.12})`;
+                            ctx.lineWidth = 0.8;
                             ctx.beginPath();
                             ctx.moveTo(particles[a].x, particles[a].y);
                             ctx.lineTo(particles[b].x, particles[b].y);
@@ -450,48 +459,6 @@
             animate();
         }
 
-        function initCodeSnake() {
-            const pit = document.getElementById('snake-pit');
-            if (!pit) return;
-            const snakeLength = 14; 
-            const segments = [];
-            const chars = "01010101XYZ<>[]#$@*";
-
-            for (let i = 0; i < snakeLength; i++) {
-                const seg = document.createElement('div');
-                seg.className = 'snake-segment';
-                seg.style.opacity = (1 - (i / snakeLength)).toString();
-                if(i === 0) seg.style.color = '#ffffff'; 
-                pit.appendChild(seg);
-                segments.push(seg);
-            }
-
-            let angle = 0;
-            setInterval(() => {
-                angle += 0.04; 
-                
-                const w = pit.offsetWidth || 300;
-                const h = pit.offsetHeight || 120;
-                const radiusX = w / 2 - 10;
-                const radiusY = h / 2 - 5;
-                const centerX = w / 2;
-                const centerY = h / 2;
-
-                for (let i = snakeLength - 1; i > 0; i--) {
-                    segments[i].style.left = segments[i-1].style.left;
-                    segments[i].style.top = segments[i-1].style.top;
-                    segments[i].innerHTML = segments[i-1].innerHTML;
-                }
-
-                const headX = centerX + radiusX * Math.cos(angle) - 5;
-                const headY = centerY + radiusY * Math.sin(angle) - 10;
-                
-                segments[0].style.left = headX + 'px';
-                segments[0].style.top = headY + 'px';
-                segments[0].innerHTML = chars[Math.floor(Math.random() * chars.length)];
-            }, 40); 
-        }
-
         function startCodeStream(elementId) {
             const el = document.getElementById(elementId);
             if (!el) return;
@@ -507,40 +474,36 @@
             }, 120);
         }
 
-        // دالة قراءة التواريخ المحمية للتعرف على مختلف الصيغ القادمة من جوجل شيت
         function parseGoogleSheetDate(dateVal) {
             if (!dateVal) return null;
             const str = dateVal.toString().trim();
             
-            // 1. فحص صيغة جوجل شيت المدمجة Date(yyyy, m, d)
             const match = str.match(/Date\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+),\s*(\d+),\s*(\d+))?\)/);
             if (match) {
                 return new Date(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]));
             }
             
-            // 2. فحص صيغة اليوم/الشهر/السنة الشائعة DD/MM/YYYY أو DD-MM-YYYY
             const dmyMatch = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
             if (dmyMatch) {
                 const day = parseInt(dmyMatch[1]);
-                const month = parseInt(dmyMatch[2]) - 1; // تحويل الترتيب الصدري للأشهر
+                const month = parseInt(dmyMatch[2]) - 1;
                 const year = parseInt(dmyMatch[3]);
                 return new Date(year, month, day);
             }
 
-            // 3. المحاولة الاعتيادية المتوافقة مع المتصفحات
             const parsed = new Date(str.replace(/\//g, '-'));
             return isNaN(parsed) ? null : parsed;
         }
 
+        // لوحة فحص التراخيص وبناء الاتصال الآمن مع قواعد البيانات
         function runLoaderSequence(onComplete) {
             const textEl = document.getElementById('decryption-text');
             const messages = [
-                "> SECURE_STREAM_CONNECT_",
-                "> STABLE_HOST_CONNECTED",
-                "> RETRIEVING_DATA_PACKETS",
-                "> PARSING_JSON_MATRIX",
-                "> LINKING_NEURAL_INTERFACE",
-                "> SYSTEM_READY"
+                "> GATEWAY: INITIALIZING SECURE HANDSHAKE...",
+                "> SSL: SECURE HOST PROTOCOL CONNECTED",
+                "> DATA: DECRYPTING CONFIGURATION MATRICES...",
+                "> SECURITY: SYSTEM VALIDATION GRANTED",
+                "> PORTAL: LOAD_SUCCESSFUL"
             ];
             let i = 0;
             const interval = setInterval(() => {
@@ -597,7 +560,6 @@
 
                         let shouldShow = true;
 
-                        // تفعيل الفلترة والتحكم بالتواريخ تلقائياً
                         if (startDateStr) {
                             const startDate = parseGoogleSheetDate(startDateStr);
                             if (startDate) {
@@ -615,14 +577,13 @@
                         }
 
                         if (shouldShow && title) {
-                            delay += 0.14; 
+                            delay += 0.12; 
                             const streamId = `stream-${index}`;
                             
                             const mediaHTML = imageUrl 
                                 ? `<img src="${imageUrl}" class="btn-img" alt="${title}">` 
                                 : `<i class="fa-solid ${iconName} icon"></i>`;
 
-                            // فحص وجود الرابط لعرضه كرابط أو كنص ممتد خالي من إعادة التحميل
                             const isLinkValid = (linkUrl && linkUrl.toString().trim() !== "" && linkUrl.toString().trim() !== "#");
                             
                             const cardHTML = `
@@ -648,23 +609,22 @@
                     });
 
                     if (container.innerHTML === '') {
-                        container.innerHTML = '<div class="error-msg">> NO_ACTIVE_CHANNELS_FOUND</div>';
+                        container.innerHTML = '<div class="error-msg">> ERROR: NO_CHANNELS_ACTIVE</div>';
                     }
 
                     add3DTiltEffect();
-                    initCodeSnake(); 
                 });
 
             } catch (error) {
                 console.error(error);
-                document.getElementById('links-container').innerHTML = '<div class="error-msg">> CONNECTION_TERMINATED_BY_HOST</div>';
+                document.getElementById('links-container').innerHTML = '<div class="error-msg">> GATEWAY_REJECTED_CONNECTION_FAIL</div>';
             }
         }
 
+        // تأثير الإمالة المؤسسي الهادئ وعمق العزل الرخامي
         function add3DTiltEffect() {
             const wrappers = document.querySelectorAll('.card-wrapper');
             wrappers.forEach(wrapper => {
-                const btn = wrapper.querySelector('.link-btn');
                 const innerElements = wrapper.querySelectorAll('.icon, .btn-img, .btn-text');
 
                 wrapper.addEventListener('mousemove', (e) => {
@@ -672,20 +632,20 @@
                     const x = e.clientX - rect.left - (rect.width/2);
                     const y = e.clientY - rect.top - (rect.height/2);
                     
-                    const angleX = -(y / (rect.height/2)) * 18; 
-                    const angleY = (x / (rect.width/2)) * 18;
+                    const angleX = -(y / (rect.height/2)) * 12; // إمالة متزنة ومحسوبة تناسب الشركات
+                    const angleY = (x / (rect.width/2)) * 12;
                     
-                    wrapper.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.04)`;
-                    wrapper.style.boxShadow = `${-angleY * 1.5}px ${angleX * 1.5}px 40px rgba(0,0,0,0.9)`;
+                    wrapper.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.025)`;
+                    wrapper.style.boxShadow = `${-angleY}px ${angleX}px 30px rgba(0,0,0,0.7)`;
 
                     innerElements.forEach(el => {
-                        el.style.transform = `translateZ(55px) translateX(${x * 0.15}px) translateY(${y * 0.15}px)`;
+                        el.style.transform = `translateZ(30px) translateX(${x * 0.08}px) translateY(${y * 0.08}px)`;
                     });
                 });
                 
                 wrapper.addEventListener('mouseleave', () => {
                     wrapper.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
-                    wrapper.style.boxShadow = `0 15px 35px rgba(0,0,0,0.8)`;
+                    wrapper.style.boxShadow = `0 12px 30px rgba(0,0,0,0.6)`;
                     
                     innerElements.forEach(el => {
                         el.style.transform = `translateZ(0) translateX(0) translateY(0)`;

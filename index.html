@@ -24,11 +24,10 @@
             margin: 0;
             padding: 0;
             font-family: 'Cairo', sans-serif;
-            cursor: none !important; /* إخفاء مؤشر الماوس التقليدي */
+            cursor: none !important; /* إخفاء مؤشر الماوس التقليدي لاستخدام مؤشر النيون التفاعلي */
         }
 
         body {
-            /* خلفية الكون المظلم الفاخر */
             background: linear-gradient(135deg, #070514 0%, #0d0926 40%, #05040d 100%);
             background-attachment: fixed;
             min-height: 100vh;
@@ -40,10 +39,10 @@
             perspective: 1500px;
         }
 
-        /* المؤشر النيوني الدائري المخصص */
+        /* مؤشر النيون المستقبلي الدائري المخصص */
         #custom-cursor {
             position: fixed;
-            width: 32px;
+            width: 28px;
             height: 32px;
             border: 2px solid var(--neon-purple);
             border-radius: 50%;
@@ -78,7 +77,7 @@
             height: 100%;
             z-index: 1;
             pointer-events: none;
-            opacity: 0.6;
+            opacity: 0.75;
         }
 
         .background-overlay {
@@ -92,10 +91,10 @@
             pointer-events: none;
         }
 
-        /* الصواريخ المضيئة العائمة بالخلفية بتأثير النيون */
+        /* الصواريخ الفضائية العائمة المضيئة في الخلفية */
         .cosmic-rocket {
             position: fixed;
-            color: rgba(192, 132, 252, 0.25);
+            color: rgba(192, 132, 252, 0.2);
             font-size: 2.5rem;
             z-index: 2;
             pointer-events: none;
@@ -106,7 +105,7 @@
 
         .cosmic-rocket-alt {
             position: fixed;
-            color: rgba(59, 130, 246, 0.2);
+            color: rgba(59, 130, 246, 0.15);
             font-size: 1.8rem;
             z-index: 2;
             pointer-events: none;
@@ -115,7 +114,7 @@
             transform: rotate(-135deg);
         }
 
-        /* حاوية الكارت الفلكية الزجاجية الكبيرة */
+        /* حاوية الكارت الفلكية الزجاجية */
         .container {
             position: relative;
             z-index: 4;
@@ -133,7 +132,7 @@
             animation: springSpawn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* شاشة عرض معلومات الفضاء والملاحة الكونية الـ HUD */
+        /* شاشة عرض معلومات الفضاء HUD */
         .hud-system-bar {
             display: flex;
             justify-content: space-between;
@@ -474,24 +473,48 @@
             }
         };
 
-        // === 🌌 نظام محاكاة النجوم والشهب المتساقطة التفاعلية بالكامل ===
+        // === 🌌 نظام محاكاة النجوم والشهب المتساقطة وأشعة البلازما التفاعلية ===
+        let stars = [];
+        let meteors = [];
+        let sparkParticles = []; // مصفوفة جزيئات الانفجار وشرارات نفاث الصاروخ
+        let mouse = { x: null, y: null };
+        let activeTouch = false;
+
         function initNeuralBackground() {
             const canvas = document.getElementById('particles-canvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            let stars = [];
-            let meteors = [];
-            let sparkParticles = []; // مصفوفة جزيئات نفاث الصواريخ للماوس
-            let mouse = { x: null, y: null };
+
+            function handleInteraction(clientX, clientY) {
+                mouse.x = clientX;
+                mouse.y = clientY;
+                activeTouch = true;
+                
+                // إطلاق شرارات الماوس/التاتش النارية الممتعة عند السحب والحركة
+                for(let i=0; i<3; i++) {
+                    sparkParticles.push(new Spark(clientX, clientY));
+                }
+            }
 
             window.addEventListener('mousemove', (e) => {
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
-                // إطلاق شرارات الماوس النارية عند الحركة
-                for(let i=0; i<3; i++) {
-                    sparkParticles.push(new Spark(e.clientX, e.clientY));
+                handleInteraction(e.clientX, e.clientY);
+            });
+
+            window.addEventListener('touchmove', (e) => {
+                if(e.touches.length > 0) {
+                    handleInteraction(e.touches[0].clientX, e.touches[0].clientY);
                 }
             });
+
+            window.addEventListener('touchstart', (e) => {
+                if(e.touches.length > 0) {
+                    handleInteraction(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            });
+
+            window.addEventListener('touchend', () => { activeTouch = false; });
+            window.addEventListener('touchcancel', () => { activeTouch = false; });
+            window.addEventListener('mouseout', () => { activeTouch = false; });
 
             function resizeCanvas() {
                 canvas.width = window.innerWidth;
@@ -522,17 +545,6 @@
                     if (this.alpha > 1 || this.alpha < 0) {
                         this.speed = -this.speed;
                     }
-                    
-                    // تأثر خفيف وجاذبية مع الماوس
-                    if (mouse.x != null && mouse.y != null) {
-                        let dx = mouse.x - this.x;
-                        let dy = mouse.y - this.y;
-                        let dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < 100) {
-                            this.x -= dx * 0.01;
-                            this.y -= dy * 0.01;
-                        }
-                    }
                     this.draw();
                 }
             }
@@ -556,7 +568,7 @@
                     this.x += this.speed * Math.cos(this.angle * Math.PI / 180);
                     this.y += this.speed * Math.sin(this.angle * Math.PI / 180);
 
-                    // رسم ذيل الشهاب النيوني الطويل
+                    // رسم ذيل الشهاب النيوني
                     let gradient = ctx.createLinearGradient(
                         this.x, this.y, 
                         this.x - this.length * Math.cos(this.angle * Math.PI / 180),
@@ -581,47 +593,105 @@
                 }
             }
 
-            // الفئة الخاصة بالشرارات النفاثة للماوس
+            // الفئة الخاصة بالشرارات وجزيئات الانفجار
             class Spark {
-                constructor(x, y) {
+                constructor(x, y, isExplosion = false, color = '245, 158, 11') {
                     this.x = x;
                     this.y = y;
-                    this.size = Math.random() * 3 + 1;
-                    this.vx = (Math.random() * 2 - 1);
-                    this.vy = (Math.random() * 2 + 1); // النفاث يتطاير لأسفل كالصاروخ
+                    this.size = isExplosion ? Math.random() * 5 + 2 : Math.random() * 3 + 1;
+                    // إذا كان انفجاراً تتطاير الجسيمات في جميع الاتجاهات بسرعة، وإلا تتطاير لأسفل كنفاث صاروخي
+                    this.vx = isExplosion ? (Math.random() * 12 - 6) : (Math.random() * 2 - 1);
+                    this.vy = isExplosion ? (Math.random() * 12 - 6) : (Math.random() * 2 + 1);
                     this.alpha = 1;
-                    this.decay = Math.random() * 0.05 + 0.02;
+                    this.decay = isExplosion ? (Math.random() * 0.03 + 0.015) : (Math.random() * 0.05 + 0.02);
+                    this.color = color;
                 }
 
                 draw() {
-                    ctx.fillStyle = `rgba(245, 158, 11, ${this.alpha})`; // لون الشرارة الناري البرتقالي الدافئ
+                    ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+                    ctx.shadowBlur = this.size * 2;
+                    ctx.shadowColor = `rgb(${this.color})`;
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                     ctx.fill();
+                    ctx.shadowBlur = 0; // تنظيف من أجل تحسين السرعة
                 }
 
                 update() {
                     this.x += this.vx;
                     this.y += this.vy;
+                    // احتكاك خفيف لجسيمات الانفجار لتبدو فيزيائية ورائعة
+                    this.vx *= 0.98;
+                    this.vy *= 0.98;
                     this.alpha -= this.decay;
                     this.draw();
                 }
             }
 
+            // دالة لتوليد أشعة البرق/الكهرباء الساكنة التفاعلية (Jagged Lightning Generator)
+            function drawStaticLightning(x1, y1, x2, y2, segments = 4, displace = 8) {
+                let currX = x1;
+                let currY = y1;
+                ctx.strokeStyle = Math.random() > 0.5 ? 'rgba(6, 182, 212, 0.7)' : 'rgba(192, 132, 252, 0.7)';
+                ctx.lineWidth = Math.random() * 1.5 + 0.8;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = ctx.strokeStyle;
+                
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                
+                for (let i = 1; i <= segments; i++) {
+                    let t = i / segments;
+                    let targetX = x1 + (x2 - x1) * t;
+                    let targetY = y1 + (y2 - y1) * t;
+                    
+                    if (i < segments) {
+                        targetX += (Math.random() - 0.5) * displace;
+                        targetY += (Math.random() - 0.5) * displace;
+                    }
+                    ctx.lineTo(targetX, targetY);
+                }
+                ctx.stroke();
+                ctx.shadowBlur = 0; // تنظيف فوري
+            }
+
             // تهيئة النجوم والشهب
-            for (let i = 0; i < 80; i++) stars.push(new Star());
+            for (let i = 0; i < 70; i++) stars.push(new Star());
             for (let i = 0; i < 3; i++) meteors.push(new Meteor());
+
+            // تصدير فئة جزيئات الشرارات لإنشاء الانفجارات خارج الدالة
+            window.triggerSparkBurst = function(x, y, color) {
+                for(let i=0; i<45; i++) {
+                    sparkParticles.push(new Spark(x, y, true, color));
+                }
+            };
 
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                // تحديث النجوم
+                // تحديث ورسم نجوم المجرة
                 for (let i = 0; i < stars.length; i++) stars[i].update();
                 
+                // رسم أشعة الكهرباء الساكنة الممتعة والتفاعلية من اللمس إلى النجوم القريبة
+                if (activeTouch && mouse.x !== null && mouse.y !== null) {
+                    let connections = 0;
+                    for (let i = 0; i < stars.length; i++) {
+                        let dx = mouse.x - stars[i].x;
+                        let dy = mouse.y - stars[i].y;
+                        let dist = Math.sqrt(dx * dx + dy * dy);
+                        
+                        // الاتصال بأقرب 6 نجوم لإطلاق الكهرباء الساكنة كأشعة البلازما
+                        if (dist < 140 && connections < 6) {
+                            drawStaticLightning(mouse.x, mouse.y, stars[i].x, stars[i].y);
+                            connections++;
+                        }
+                    }
+                }
+
                 // تحديث الشهب
                 for (let i = 0; i < meteors.length; i++) meteors[i].update();
 
-                // تحديث شرارات الصواريخ للماوس
+                // تحديث جزيئات الشرارات والانفجارات
                 for (let i = 0; i < sparkParticles.length; i++) {
                     sparkParticles[i].update();
                     if (sparkParticles[i].alpha <= 0) {
@@ -755,7 +825,7 @@
                                     <div class="hud-bracket bracket-br"></div>
                                     <div class="glow-spotlight"></div>
                                     <div class="code-bg" id="${streamId}"></div>
-                                    <${isLinkValid ? `a href="${linkUrl}"` : 'div style="cursor: none;"'} class="link-btn">
+                                    <${isLinkValid ? `a href="${linkUrl}"` : 'div style="cursor: none;"'} class="link-btn" onclick="handleWarpClick(event, '${linkUrl}', '${colorClass}')">
                                         ${mediaHTML}
                                         <div class="btn-text">
                                             <span class="title">${title}</span>
@@ -783,7 +853,49 @@
             }
         }
 
-        // === 🎮 إدارة التفاعلات للكروت ===
+        // === 💥 ميكانيكا محاكاة انفجار الكارت الفضائي وتأخير الانتقال ===
+        function handleInlineNavigation(e, linkUrl) {
+            e.preventDefault();
+            const card = e.currentTarget.closest('.card-wrapper');
+            if(!card) return;
+
+            const rect = card.getBoundingClientRect();
+            // الحصول على نقطة المنتصف للكارت لإطلاق جزيئات الانفجار منها
+            const centerX = rect.left + (rect.width / 2);
+            const centerY = rect.top + (rect.height / 2);
+
+            // تفعيل صوت الحجز الفضائي الفخم
+            synthSound.playClick();
+
+            // إخفاء الكارت مؤقتاً بتأثير فلاش نيون سريع لتبدو كأنها تفككت من الانفجار
+            card.style.transition = 'transform 0.2s, opacity 0.2s';
+            card.style.transform = 'scale(0.85)';
+            card.style.opacity = '0';
+
+            // إطلاق جزيئات الانفجار البرتقالية والوردية النارية الممتعة
+            if (typeof sparkParticles !== 'undefined') {
+                for (let i = 0; i < 35; i++) {
+                    let s = new Spark(centerX, centerY);
+                    s.vx = (Math.random() * 12 - 6); // زيادة سرعة انتشار جزيئات الانفجار
+                    s.vy = (Math.random() * 12 - 6);
+                    s.size = Math.random() * 4 + 1.5;
+                    s.decay = Math.random() * 0.03 + 0.015;
+                    sparkParticles.push(s);
+                }
+            }
+
+            // انتظار 450ms ريثما يتمدد الانفجار ثم فتح الرابط بسلاسة تامة
+            setTimeout(() => {
+                if (linkUrl && linkUrl !== '#') {
+                    window.open(linkUrl, '_blank');
+                }
+                // استعادة شكل الكارت بعد مغادرة الصفحة
+                card.style.transform = '';
+                card.style.opacity = '1';
+            }, 450);
+        }
+
+        // === 🎮 إدارة التفاعلات للكروت ومؤشر الماوس ===
         function addInteractiveFeatures() {
             const wrappers = document.querySelectorAll('.card-wrapper');
             const cursor = document.getElementById('custom-cursor');
@@ -799,6 +911,16 @@
             wrappers.forEach(wrapper => {
                 const innerElements = wrapper.querySelectorAll('.icon, .btn-img, .btn-text');
                 const spotlight = wrapper.querySelector('.glow-spotlight');
+                const link = wrapper.querySelector('a');
+
+                // اعتراض ضغطة الرابط لربطها بانفجار ريسيت
+                if (link) {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const href = link.getAttribute('href');
+                        processInlineBooking(href, wrapper);
+                    });
+                }
 
                 wrapper.addEventListener('mouseenter', () => {
                     synthSound.playHover();
@@ -838,11 +960,49 @@
                         el.style.transform = `translateZ(0) translateX(0) translateY(0)`;
                     });
                 });
-
-                wrapper.addEventListener('click', () => {
-                    synthSound.playClick();
-                });
             });
+        }
+
+        // تحضير وإطلاق انفجار الكارت عند الضغط
+        function processInlineBooking(href, cardElement) {
+            const linkBtn = cardElement.querySelector('.link-btn');
+            if (!linkBtn) return;
+            
+            const rect = linkBtn.getBoundingClientRect();
+            const centerX = rect.left + (rect.width / 2);
+            const centerY = rect.top + (rect.height / 2);
+
+            // إطلاق مؤثر الصوت للانفجار الفضائي
+            synthSound.playClick();
+
+            // فلاش نيون وتفكيك الكارت
+            cardElement.style.transition = 'transform 0.25s, opacity 0.25s';
+            cardElement.style.transform = 'scale(0.8) rotateZ(3deg)';
+            cardElement.style.opacity = '0';
+
+            // تفجير الجسيمات الفلكية الملونة المتناثرة بفيزياء الجاذبية
+            const themeColors = {
+                'purple': '192, 132, 252',
+                'blue': '59, 130, 246',
+                'green': '52, 211, 153',
+                'dark': '255, 255, 255'
+            };
+            const activeColor = cardElement.className.match(/wrapper-(\w+)/)?.[1] || 'purple';
+            const colorRgb = themeColors[activeColor] || '192, 132, 252';
+
+            if (typeof triggerSparkBurst === 'function') {
+                triggerSparkBurst(centerX, centerY, colorRgb);
+            }
+
+            // حجز وتأخير فتح الرابط لمدة 450ms لإعطاء فرصة للاستمتاع برؤية الانفجار الفضائي
+            setTimeout(() => {
+                if (href && href !== '#') {
+                    window.open(href, '_blank');
+                }
+                // استعادة الكارت لوضعه الطبيعي تحسباً لرجوع العميل
+                cardElement.style.transform = '';
+                cardElement.style.opacity = '1';
+            }, 450);
         }
 
         // === 📡 محاكاة وتحديث شريط البيانات الحي الـ HUD ===

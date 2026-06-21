@@ -13,6 +13,10 @@
             --accent-gold: #e9d5ff;
             --border-color: rgba(255, 255, 255, 0.12);
             --card-bg: rgba(255, 255, 255, 0.06);
+            --neon-purple: #c084fc;
+            --neon-blue: #3b82f6;
+            --neon-green: #34d399;
+            --rocket-glow: rgba(227, 6, 19, 0.3);
         }
 
         * {
@@ -20,11 +24,12 @@
             margin: 0;
             padding: 0;
             font-family: 'Cairo', sans-serif;
+            cursor: none !important; /* إخفاء مؤشر الماوس التقليدي */
         }
 
         body {
-            /* التدرج اللوني البنفسجي المأخوذ من صورة الواجهة المرفقة */
-            background: linear-gradient(135deg, #7c7ecb 0%, #484196 50%, #2f2571 100%);
+            /* خلفية الكون المظلم الفاخر */
+            background: linear-gradient(135deg, #070514 0%, #0d0926 40%, #05040d 100%);
             background-attachment: fixed;
             min-height: 100vh;
             display: flex;
@@ -35,7 +40,36 @@
             perspective: 1500px;
         }
 
-        /* كانفاس الجزيئات الشبكية البيضاء المتناسقة مع طابع الزجاج */
+        /* المؤشر النيوني الدائري المخصص */
+        #custom-cursor {
+            position: fixed;
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--neon-purple);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, border-color 0.2s;
+            z-index: 9999;
+            display: none;
+            mix-blend-mode: screen;
+            box-shadow: 0 0 12px rgba(192, 132, 252, 0.6);
+        }
+        #custom-cursor-dot {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background-color: var(--neon-purple);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            display: none;
+        }
+        @media (min-width: 768px) {
+            #custom-cursor, #custom-cursor-dot { display: block; }
+        }
+
         #particles-canvas {
             position: fixed;
             top: 0;
@@ -44,7 +78,7 @@
             height: 100%;
             z-index: 1;
             pointer-events: none;
-            opacity: 0.35;
+            opacity: 0.6;
         }
 
         .background-overlay {
@@ -53,77 +87,102 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(47, 37, 113, 0.25);
+            background: radial-gradient(circle at center, transparent 20%, rgba(5, 4, 13, 0.9) 100%);
             z-index: 2;
             pointer-events: none;
         }
 
-        /* حاوية الكارت الزجاجي الكبير المطابق تماماً للصورة المرفقة */
+        /* الصواريخ المضيئة العائمة بالخلفية بتأثير النيون */
+        .cosmic-rocket {
+            position: fixed;
+            color: rgba(192, 132, 252, 0.25);
+            font-size: 2.5rem;
+            z-index: 2;
+            pointer-events: none;
+            filter: drop-shadow(0 0 10px rgba(192, 132, 252, 0.4));
+            animation: rocketOrbit 35s linear infinite;
+            transform: rotate(-45deg);
+        }
+
+        .cosmic-rocket-alt {
+            position: fixed;
+            color: rgba(59, 130, 246, 0.2);
+            font-size: 1.8rem;
+            z-index: 2;
+            pointer-events: none;
+            filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3));
+            animation: rocketOrbitAlt 45s linear infinite;
+            transform: rotate(-135deg);
+        }
+
+        /* حاوية الكارت الفلكية الزجاجية الكبيرة */
         .container {
             position: relative;
             z-index: 4;
             width: 92%;
-            max-width: 440px;
+            max-width: 450px;
             margin: 40px auto;
-            padding: 40px 24px;
+            padding: 35px 24px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 28px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 32px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
             animation: springSpawn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* ترويسة التحقق الآمن مدمجة كحبة زجاجية أنيقة */
-        .security-handshake-bar {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
-            padding: 6px 14px;
-            font-size: 10px;
-            font-family: 'Fira Code', monospace;
-            color: rgba(255, 255, 255, 0.85);
-            display: inline-flex;
+        /* شاشة عرض معلومات الفضاء والملاحة الكونية الـ HUD */
+        .hud-system-bar {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 24px;
-            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 8px 16px;
+            font-family: 'Fira Code', monospace;
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 25px;
         }
-        .security-dot {
-            width: 7px;
-            height: 7px;
-            background-color: #06b6d4;
+        .hud-status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--neon-green);
+            font-weight: bold;
+        }
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--neon-green);
             border-radius: 50%;
-            box-shadow: 0 0 8px #06b6d4;
-            animation: pulse-secure 1.5s infinite;
+            box-shadow: 0 0 8px var(--neon-green);
+            animation: pulse-status 1.2s infinite;
         }
 
         /* رأس الصفحة */
         .profile-header {
             position: relative;
             margin-bottom: 30px;
-            transform-style: preserve-3d;
         }
 
         .store-name {
-            font-size: 2.1rem;
+            font-size: 2.2rem;
             color: #ffffff; 
             font-weight: 900;
-            margin-bottom: 8px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            line-height: 1.2;
-            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
         }
-        @media (min-width: 480px) { .store-name { font-size: 2.6rem; } }
 
         .store-bio {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            color: var(--neon-purple);
             font-family: 'Fira Code', monospace;
             font-weight: 500;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .links-list {
@@ -132,41 +191,58 @@
             gap: 16px;
         }
 
-        /* كارت الروابط الزجاجي البلوري المصمم كحقول الصورة */
+        /* الكارت النيون التفاعلي الفخم */
         .card-wrapper {
             position: relative;
-            border-radius: 16px;
+            border-radius: 18px;
             padding: 1px;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.04);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             opacity: 0;
-            transform: scale(0.92) translateY(30px) rotateX(-10deg);
-            animation: cardEntranceSpring 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            transform: scale(0.9) translateY(40px);
+            animation: cardEntranceSpring 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+            transition: transform 0.1s ease-out, border-color 0.3s;
             transform-style: preserve-3d;
         }
 
-        /* زوايا الزجاج الراقية */
+        /* زوايا الكروت */
         .hud-bracket {
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-color: rgba(255, 255, 255, 0.15);
             border-style: solid;
             z-index: 10;
-            opacity: 0.4;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0.3;
+            transition: all 0.3s;
         }
-        .bracket-tl { top: 8px; left: 8px; border-width: 1px 0 0 1px; border-top-left-radius: 4px; }
-        .bracket-tr { top: 8px; right: 8px; border-width: 1px 1px 0 0; border-top-right-radius: 4px; }
-        .bracket-bl { bottom: 8px; left: 8px; border-width: 0 0 1px 1px; border-bottom-left-radius: 4px; }
-        .bracket-br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; border-bottom-right-radius: 4px; }
+        .bracket-tl { top: 10px; left: 10px; border-width: 1.5px 0 0 1.5px; border-top-left-radius: 4px; }
+        .bracket-tr { top: 10px; right: 10px; border-width: 1.5px 1.5px 0 0; border-top-right-radius: 4px; }
+        .bracket-bl { bottom: 10px; left: 10px; border-width: 0 0 1.5px 1.5px; border-bottom-left-radius: 4px; }
+        .bracket-br { bottom: 10px; right: 10px; border-width: 0 1.5px 1.5px 0; border-bottom-right-radius: 4px; }
 
         .card-wrapper:hover .hud-bracket {
-            opacity: 0.9;
+            opacity: 1;
             border-color: var(--glow-color, rgba(255,255,255,0.4));
-            transform: scale(1.05);
+        }
+
+        /* إضاءة التحويم الذكية */
+        .glow-spotlight {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--glow-color, rgba(255,255,255,0.15)) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1;
+        }
+        .card-wrapper:hover .glow-spotlight {
+            opacity: 0.55;
         }
 
         .code-bg {
@@ -176,8 +252,8 @@
             width: 100%;
             height: 100%;
             font-family: 'Fira Code', monospace;
-            font-size: 9px;
-            color: #ffffff;
+            font-size: 8px;
+            color: var(--glow-color, #ffffff);
             opacity: 0.02;
             overflow: hidden;
             white-space: nowrap;
@@ -186,75 +262,72 @@
             text-align: left;
             padding: 5px;
             z-index: 2;
+            transition: opacity 0.3s;
+        }
+        .card-wrapper:hover .code-bg {
+            opacity: 0.08;
         }
 
-        /* الزر التفاعلي */
+        /* الأزرار التفاعلية */
         .link-btn {
             position: relative;
             display: flex;
             align-items: center;
-            padding: 15px 18px;
-            border-radius: 15px;
+            padding: 16px 20px;
+            border-radius: 17px;
             text-decoration: none;
             color: white;
-            background: rgba(255, 255, 255, 0.06);
+            background: transparent;
             width: 100%;
             height: 100%;
             z-index: 3;
             transition: background 0.3s;
             transform-style: preserve-3d;
-            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .link-btn:hover { background: rgba(255, 255, 255, 0.14); }
-        .icon, .btn-img, .btn-text { transform: translateZ(25px); transition: transform 0.25s ease; }
+        .link-btn:hover { background: rgba(255, 255, 255, 0.03); }
+        .icon, .btn-img, .btn-text { transform: translateZ(20px); transition: transform 0.25s ease-out; }
 
         .icon {
-            font-size: 1.35rem;
+            font-size: 1.4rem;
             margin-left: 14px;
             width: 28px;
             text-align: center;
-            text-shadow: 0 0 8px currentColor;
+            text-shadow: 0 0 10px currentColor;
         }
-        @media (min-width: 640px) { .icon { font-size: 1.5rem; margin-left: 18px; } }
 
         .btn-img {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
             margin-left: 14px;
             object-fit: cover;
-            border: 1px solid rgba(255,255,255,0.15);
+            border: 1.5px solid rgba(255,255,255,0.1);
         }
-        @media (min-width: 640px) { .btn-img { width: 44px; height: 44px; margin-left: 18px; } }
 
         .btn-text { display: flex; flex-direction: column; text-align: right; flex-grow: 1; }
-        .btn-text .title { font-size: 1rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.15); letter-spacing: -0.2px; }
-        @media (min-width: 640px) { .btn-text .title { font-size: 1.1rem; } }
+        .btn-text .title { font-size: 1.05rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.15); }
         .btn-text .subtitle { font-size: 0.75rem; color: rgba(255, 255, 255, 0.5); margin-top: 3px; transition: color 0.3s; }
-        @media (min-width: 640px) { .btn-text .subtitle { font-size: 0.8rem; } }
 
-        /* الألوان والنيون المخصص المتناسق مع أزرار الإدخال والـ Sign In بالصورة */
-        .wrapper-purple { --glow-color: #c084fc; color: #f3e8ff; }
+        /* تدرجات باقات اتصالات الفخمة */
+        .wrapper-purple { --glow-color: var(--neon-purple); color: #f3e8ff; }
         
-        /* التدرج اللوني للأزرق والسايان المطابق تماماً لزر Sign In في الصورة المرفقة */
         .wrapper-blue { 
-            --glow-color: #60a5fa; 
+            --glow-color: var(--neon-blue); 
             color: #ffffff; 
         }
         .wrapper-blue .link-btn {
-            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
-            border-color: rgba(255,255,255,0.15);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%);
+            border: 1px solid rgba(6, 182, 212, 0.25);
         }
         .wrapper-blue .link-btn:hover {
-            background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(6, 182, 212, 0.3) 100%);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
         }
-        .wrapper-blue .subtitle {
-            color: rgba(255, 255, 255, 0.8) !important;
-        }
+        .wrapper-blue .subtitle { color: rgba(255, 255, 255, 0.7) !important; }
 
-        .wrapper-green  { --glow-color: #34d399; color: #ecfdf5; }
-        .wrapper-dark   { --glow-color: rgba(255,255,255,0.3); color: #f9fafb; }
+        .wrapper-green  { --glow-color: var(--neon-green); color: #ecfdf5; }
+        .wrapper-dark   { --glow-color: rgba(255,255,255,0.25); color: #f9fafb; }
 
         .link-btn:hover .subtitle { color: #ffffff; }
 
@@ -273,14 +346,29 @@
             width: 38px;
             height: 38px;
             border: 2px solid rgba(255, 255, 255, 0.1);
-            border-top: 2px solid #ffffff;
-            border-right: 2px solid #ffffff;
+            border-top: 2px solid var(--neon-purple);
+            border-right: 2px solid var(--neon-purple);
             border-radius: 50%;
             margin-bottom: 16px;
         }
 
+        /* الحركات الكونية لسباحة الصواريخ في الخلفية */
+        @keyframes rocketOrbit {
+            0% { transform: translate(-10vw, 110vh) rotate(-45deg); opacity: 0; }
+            5% { opacity: 0.35; }
+            95% { opacity: 0.35; }
+            100% { transform: translate(110vw, -10vh) rotate(-45deg); opacity: 0; }
+        }
+
+        @keyframes rocketOrbitAlt {
+            0% { transform: translate(110vw, 110vh) rotate(-135deg); opacity: 0; }
+            5% { opacity: 0.3; }
+            95% { opacity: 0.3; }
+            100% { transform: translate(-10vw, -10vh) rotate(-135deg); opacity: 0; }
+        }
+
         @keyframes cardEntranceSpring {
-            0% { opacity: 0; transform: scale(0.92) translateY(30px) rotateX(-10deg); filter: blur(3px); }
+            0% { opacity: 0; transform: scale(0.9) translateY(40px) rotateX(-8deg); filter: blur(4px); }
             100% { opacity: 1; transform: scale(1) translateY(0) rotateX(0); filter: blur(0); }
         }
 
@@ -289,9 +377,9 @@
             100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
         }
 
-        @keyframes pulse-secure {
+        @keyframes pulse-status {
             0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 12px #06b6d4; }
+            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 12px var(--neon-green); }
         }
 
         .error-msg { color: #f87171; font-size: 0.9rem; padding: 30px; font-weight: bold; font-family: 'Fira Code', monospace; }
@@ -302,21 +390,34 @@
     <canvas id="particles-canvas"></canvas>
     <div class="background-overlay"></div>
 
+    <!-- الصواريخ الفضائية العائمة المضيئة في الخلفية -->
+    <div class="cosmic-rocket"><i class="fa-solid fa-rocket"></i></div>
+    <div class="cosmic-rocket-alt"><i class="fa-solid fa-shuttle-space"></i></div>
+
+    <!-- مؤشر الماوس النيوني التفاعلي المخصص ومطلق ذيول الشرارات النارية -->
+    <div id="custom-cursor"></div>
+    <div id="custom-cursor-dot"></div>
+
     <div class="container">
-        <!-- ترويسة التحقق الآمن بلورية المظهر كإعدادات نظام الأندرويد والـ iOS -->
-        <div class="security-handshake-bar">
-            <span class="security-dot"></span>
+        <!-- شريط HUD الكوني -->
+        <div class="hud-system-bar">
+            <div class="hud-status-indicator">
+                <span class="status-dot"></span>
+                <span>GALAXY LINK ACTIVE</span>
+            </div>
+            <div id="hud-ping-display">ORBIT: -- ms</div>
+            <div id="hud-fps-display">NAV: 60</div>
         </div>
 
         <header class="profile-header" id="main-header">
             <h1 class="store-name" id="dynamic-store-name">SYSTEM_INIT</h1>
-            <p class="store-bio" id="dynamic-store-bio">// LINKING_DATA_STREAM</p>
+            <p class="store-bio" id="dynamic-store-bio">// SECURING_ORBITAL_STREAM</p>
         </header>
 
         <main class="links-list" id="links-container">
             <div class="hud-loader">
                 <div class="decryption-wheel spin"></div>
-                <div id="decryption-text">&gt; ESTABLISHING_SECURE_CONNECTION_</div>
+                <div id="decryption-text">&gt; CALIBRATING_STARS_AND_METEORS_</div>
             </div>
         </main>
     </div>
@@ -325,13 +426,72 @@
         const SPREADSHEET_ID = '1z1iYsSmwvCmUIGBoF8Wo9ZbmOafXebIa3krxa7wn0eM'; 
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
 
-        // === 🚀 شبكة جزيئات التدفق السحابية باللون الأبيض شبه الشفاف لتلائم الزجاج المصقول ===
+        // === 🎵 المعالج الصوتي الفضائي (Native Synth Web Audio API) ===
+        const synthSound = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            },
+            playHover() {
+                this.init();
+                if (this.ctx.state === 'suspended') this.ctx.resume();
+                
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(500, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1000, this.ctx.currentTime + 0.05);
+                
+                gain.gain.setValueAtTime(0.03, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.05);
+            },
+            playClick() {
+                this.init();
+                if (this.ctx.state === 'suspended') this.ctx.resume();
+                
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(700, this.ctx.currentTime);
+                osc.frequency.setValueAtTime(1400, this.ctx.currentTime + 0.03);
+                
+                gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.1);
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.1);
+            }
+        };
+
+        // === 🌌 نظام محاكاة النجوم والشهب المتساقطة التفاعلية بالكامل ===
         function initNeuralBackground() {
             const canvas = document.getElementById('particles-canvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            let particles = [];
-            let mouse = { x: null, y: null, radius: 120 };
+            let stars = [];
+            let meteors = [];
+            let sparkParticles = []; // مصفوفة جزيئات نفاث الصواريخ للماوس
+            let mouse = { x: null, y: null };
+
+            window.addEventListener('mousemove', (e) => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+                // إطلاق شرارات الماوس النارية عند الحركة
+                for(let i=0; i<3; i++) {
+                    sparkParticles.push(new Spark(e.clientX, e.clientY));
+                }
+            });
 
             function resizeCanvas() {
                 canvas.width = window.innerWidth;
@@ -340,97 +500,142 @@
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
 
-            window.addEventListener('mousemove', (e) => {
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
-            });
-
-            window.addEventListener('mouseout', () => {
-                mouse.x = null;
-                mouse.y = null;
-            });
-
-            class Particle {
+            // الفئة الخاصة بنجوم مجرة الخلفية المتلألئة
+            class Star {
                 constructor() {
                     this.x = Math.random() * canvas.width;
                     this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 1.5 + 1;
-                    this.vx = (Math.random() * 0.4 - 0.2); 
-                    this.vy = (Math.random() * 0.4 - 0.2);
-                    this.density = (Math.random() * 20) + 10;
+                    this.size = Math.random() * 1.5 + 0.5;
+                    this.alpha = Math.random();
+                    this.speed = Math.random() * 0.02 + 0.005;
                 }
 
                 draw() {
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.closePath();
                     ctx.fill();
                 }
 
                 update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-
-                    if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
-                    if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
-
+                    this.alpha += this.speed;
+                    if (this.alpha > 1 || this.alpha < 0) {
+                        this.speed = -this.speed;
+                    }
+                    
+                    // تأثر خفيف وجاذبية مع الماوس
                     if (mouse.x != null && mouse.y != null) {
                         let dx = mouse.x - this.x;
                         let dy = mouse.y - this.y;
-                        let distance = Math.sqrt(dx * dx + dy * dy);
-                        if (distance < mouse.radius) {
-                            let forceDirectionX = dx / distance;
-                            let forceDirectionY = dy / distance;
-                            let maxDistance = mouse.radius;
-                            let force = (maxDistance - distance) / maxDistance;
-                            let directionX = forceDirectionX * force * this.density * 0.2;
-                            let directionY = forceDirectionY * force * this.density * 0.2;
-                            this.x -= directionX;
-                            this.y -= directionY;
+                        let dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 100) {
+                            this.x -= dx * 0.01;
+                            this.y -= dy * 0.01;
                         }
                     }
                     this.draw();
                 }
             }
 
-            const particleCount = Math.min(Math.floor(window.innerWidth / 20), 45);
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
+            // الفئة الخاصة بالشهب المتساقطة (Meteors)
+            class Meteor {
+                constructor() {
+                    this.reset();
+                }
 
-            function connect() {
-                let opacityValue = 1;
-                for (let a = 0; i = particles.length, a < i; a++) {
-                    for (let b = a; b < particles.length; b++) {
-                        let dx = particles[a].x - particles[b].x;
-                        let dy = particles[a].y - particles[b].y;
-                        let distance = Math.sqrt(dx * dx + dy * dy);
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = -50;
+                    this.length = Math.random() * 80 + 40;
+                    this.speed = Math.random() * 10 + 6;
+                    this.angle = 45; // زاوية السقوط المائلة
+                    this.opacity = Math.random() * 0.5 + 0.3;
+                }
 
-                        if (distance < 120) {
-                            opacityValue = 1 - (distance / 120);
-                            ctx.strokeStyle = `rgba(255, 255, 255, ${opacityValue * 0.12})`;
-                            ctx.lineWidth = 0.8;
-                            ctx.beginPath();
-                            ctx.moveTo(particles[a].x, particles[a].y);
-                            ctx.lineTo(particles[b].x, particles[b].y);
-                            ctx.stroke();
-                        }
+                update() {
+                    this.x += this.speed * Math.cos(this.angle * Math.PI / 180);
+                    this.y += this.speed * Math.sin(this.angle * Math.PI / 180);
+
+                    // رسم ذيل الشهاب النيوني الطويل
+                    let gradient = ctx.createLinearGradient(
+                        this.x, this.y, 
+                        this.x - this.length * Math.cos(this.angle * Math.PI / 180),
+                        this.y - this.length * Math.sin(this.angle * Math.PI / 180)
+                    );
+                    gradient.addColorStop(0, `rgba(192, 132, 252, ${this.opacity})`);
+                    gradient.addColorStop(1, 'rgba(192, 132, 252, 0)');
+
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.y);
+                    ctx.lineTo(
+                        this.x - this.length * Math.cos(this.angle * Math.PI / 180),
+                        this.y - this.length * Math.sin(this.angle * Math.PI / 180)
+                    );
+                    ctx.stroke();
+
+                    if (this.y > canvas.height + 50 || this.x > canvas.width + 50) {
+                        this.reset();
                     }
                 }
             }
 
+            // الفئة الخاصة بالشرارات النفاثة للماوس
+            class Spark {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.size = Math.random() * 3 + 1;
+                    this.vx = (Math.random() * 2 - 1);
+                    this.vy = (Math.random() * 2 + 1); // النفاث يتطاير لأسفل كالصاروخ
+                    this.alpha = 1;
+                    this.decay = Math.random() * 0.05 + 0.02;
+                }
+
+                draw() {
+                    ctx.fillStyle = `rgba(245, 158, 11, ${this.alpha})`; // لون الشرارة الناري البرتقالي الدافئ
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.alpha -= this.decay;
+                    this.draw();
+                }
+            }
+
+            // تهيئة النجوم والشهب
+            for (let i = 0; i < 80; i++) stars.push(new Star());
+            for (let i = 0; i < 3; i++) meteors.push(new Meteor());
+
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                for (let i = 0; i < particles.length; i++) {
-                    particles[i].update();
+                
+                // تحديث النجوم
+                for (let i = 0; i < stars.length; i++) stars[i].update();
+                
+                // تحديث الشهب
+                for (let i = 0; i < meteors.length; i++) meteors[i].update();
+
+                // تحديث شرارات الصواريخ للماوس
+                for (let i = 0; i < sparkParticles.length; i++) {
+                    sparkParticles[i].update();
+                    if (sparkParticles[i].alpha <= 0) {
+                        sparkParticles.splice(i, 1);
+                        i--;
+                    }
                 }
-                connect();
+                
                 requestAnimationFrame(animate);
             }
             animate();
         }
 
+        // === 🖥️ تدفق الكود البرمجي التفاعلي ===
         function startCodeStream(elementId) {
             const el = document.getElementById(elementId);
             if (!el) return;
@@ -449,19 +654,11 @@
         function parseGoogleSheetDate(dateVal) {
             if (!dateVal) return null;
             const str = dateVal.toString().trim();
-            
             const match = str.match(/Date\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+),\s*(\d+),\s*(\d+))?\)/);
-            if (match) {
-                return new Date(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]));
-            }
+            if (match) return new Date(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]));
             
             const dmyMatch = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
-            if (dmyMatch) {
-                const day = parseInt(dmyMatch[1]);
-                const month = parseInt(dmyMatch[2]) - 1;
-                const year = parseInt(dmyMatch[3]);
-                return new Date(year, month, day);
-            }
+            if (dmyMatch) return new Date(parseInt(dmyMatch[3]), parseInt(dmyMatch[2]) - 1, parseInt(dmyMatch[1]));
 
             const parsed = new Date(str.replace(/\//g, '-'));
             return isNaN(parsed) ? null : parsed;
@@ -470,11 +667,9 @@
         function runLoaderSequence(onComplete) {
             const textEl = document.getElementById('decryption-text');
             const messages = [
-                "> CONFIG: ESTABLISHING SECURE GATEWAY...",
-                "> SECURITY: SYSTEM VALIDATION GRANTED",
-                "> RETRIEVING DATA PACKETS...",
-                "> DECRYPTING FILE MATRICES...",
-                "> PORTAL INITIALIZED SUCCESSFULLY"
+                "> ESTABLISHING_ORBITAL_CONNECTION...",
+                "> RETRIEVING_METEORS_AND_ROCKETS...",
+                "> ACCESS_GRANTED: GALAXY_PORTAL_ONLINE"
             ];
             let i = 0;
             const interval = setInterval(() => {
@@ -485,14 +680,13 @@
                     clearInterval(interval);
                     onComplete();
                 }
-            }, 300);
+            }, 250);
         }
 
         async function fetchLinks() {
             try {
                 const response = await fetch(url);
                 const text = await response.text();
-                
                 const jsonData = JSON.parse(text.substr(47).slice(0, -2));
                 const rows = jsonData.table.rows;
 
@@ -506,12 +700,8 @@
                     let sheetStoreName = 'نافع ستور';
                     let sheetStoreBio = '// CONNECTION_SECURE';
 
-                    if (rows[0] && rows[0].c[8] && rows[0].c[8].v) {
-                        sheetStoreName = rows[0].c[8].v;
-                    }
-                    if (rows[1] && rows[1].c[8] && rows[1].c[8].v) {
-                        sheetStoreBio = rows[1].c[8].v;
-                    }
+                    if (rows[0]?.c[8]?.v) sheetStoreName = rows[0].c[8].v;
+                    if (rows[1]?.c[8]?.v) sheetStoreBio = rows[1].c[8].v;
 
                     document.getElementById('dynamic-store-name').innerText = sheetStoreName;
                     document.getElementById('dynamic-store-bio').innerText = sheetStoreBio;
@@ -548,11 +738,11 @@
                         }
 
                         if (shouldShow && title) {
-                            delay += 0.12; 
+                            delay += 0.1; 
                             const streamId = `stream-${index}`;
                             
                             const mediaHTML = imageUrl 
-                                ? `<img src="${imageUrl}" class="btn-img" alt="${title}">` 
+                                ? `<img src="${imageUrl}" class="btn-img animate-shimmer" alt="${title}">` 
                                 : `<i class="fa-solid ${iconName} icon"></i>`;
 
                             const isLinkValid = (linkUrl && linkUrl.toString().trim() !== "" && linkUrl.toString().trim() !== "#");
@@ -563,8 +753,9 @@
                                     <div class="hud-bracket bracket-tr"></div>
                                     <div class="hud-bracket bracket-bl"></div>
                                     <div class="hud-bracket bracket-br"></div>
+                                    <div class="glow-spotlight"></div>
                                     <div class="code-bg" id="${streamId}"></div>
-                                    <${isLinkValid ? `a href="${linkUrl}"` : 'div style="cursor: default;"'} class="link-btn">
+                                    <${isLinkValid ? `a href="${linkUrl}"` : 'div style="cursor: none;"'} class="link-btn">
                                         ${mediaHTML}
                                         <div class="btn-text">
                                             <span class="title">${title}</span>
@@ -580,53 +771,110 @@
                     });
 
                     if (container.innerHTML === '') {
-                        container.innerHTML = '<div class="error-msg">> ERROR: SYSTEM_PORTAL_EMPTY</div>';
+                        container.innerHTML = '<div class="error-msg">> ERROR: PORTAL_STREAM_EMPTY</div>';
                     }
 
-                    add3DTiltEffect();
+                    addInteractiveFeatures();
                 });
 
             } catch (error) {
                 console.error(error);
-                document.getElementById('links-container').innerHTML = '<div class="error-msg">> ACCESS_REJECTED_BY_SERVER</div>';
+                document.getElementById('links-container').innerHTML = '<div class="error-msg">> GALAXY_HANDSHAKE_REJECTED</div>';
             }
         }
 
-        // تأثير الإمالة والمحاذاة ثلاثية الأبعاد المرنة للزجاج المصقول
-        function add3DTiltEffect() {
+        // === 🎮 إدارة التفاعلات للكروت ===
+        function addInteractiveFeatures() {
             const wrappers = document.querySelectorAll('.card-wrapper');
+            const cursor = document.getElementById('custom-cursor');
+            const cursorDot = document.getElementById('custom-cursor-dot');
+
+            window.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                cursorDot.style.left = e.clientX + 'px';
+                cursorDot.style.top = e.clientY + 'px';
+            });
+
             wrappers.forEach(wrapper => {
                 const innerElements = wrapper.querySelectorAll('.icon, .btn-img, .btn-text');
+                const spotlight = wrapper.querySelector('.glow-spotlight');
+
+                wrapper.addEventListener('mouseenter', () => {
+                    synthSound.playHover();
+                    cursor.style.width = '48px';
+                    cursor.style.height = '48px';
+                    cursor.style.borderColor = 'var(--glow-color, #ffffff)';
+                });
 
                 wrapper.addEventListener('mousemove', (e) => {
                     const rect = wrapper.getBoundingClientRect();
-                    const x = e.clientX - rect.left - (rect.width/2);
-                    const y = e.clientY - rect.top - (rect.height/2);
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
                     
-                    const angleX = -(y / (rect.height/2)) * 12; 
-                    const angleY = (x / (rect.width/2)) * 12;
+                    spotlight.style.left = x + 'px';
+                    spotlight.style.top = y + 'px';
+
+                    const rotateX = -((y - rect.height/2) / (rect.height/2)) * 12; 
+                    const rotateY = ((x - rect.width/2) / (rect.width/2)) * 12;
                     
-                    wrapper.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.025)`;
-                    wrapper.style.boxShadow = `${-angleY}px ${angleX}px 30px rgba(0,0,0,0.4)`;
+                    wrapper.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.025)`;
+                    wrapper.style.boxShadow = `${-rotateY}px ${rotateX}px 35px rgba(0,0,0,0.45)`;
 
                     innerElements.forEach(el => {
-                        el.style.transform = `translateZ(30px) translateX(${x * 0.08}px) translateY(${y * 0.08}px)`;
+                        el.style.transform = `translateZ(25px) translateX(${(x - rect.width/2) * 0.08}px) translateY(${(y - rect.height/2) * 0.08}px)`;
                     });
                 });
                 
                 wrapper.addEventListener('mouseleave', () => {
+                    cursor.style.width = '32px';
+                    cursor.style.height = '32px';
+                    cursor.style.borderColor = 'var(--neon-purple)';
+                    
                     wrapper.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
-                    wrapper.style.boxShadow = `0 8px 24px rgba(0,0,0,0.1)`;
+                    wrapper.style.boxShadow = `0 8px 32px rgba(0,0,0,0.2)`;
                     
                     innerElements.forEach(el => {
                         el.style.transform = `translateZ(0) translateX(0) translateY(0)`;
                     });
                 });
+
+                wrapper.addEventListener('click', () => {
+                    synthSound.playClick();
+                });
             });
+        }
+
+        // === 📡 محاكاة وتحديث شريط البيانات الحي الـ HUD ===
+        function startDiagnosticsHUD() {
+            const pingDisplay = document.getElementById('hud-ping-display');
+            const fpsDisplay = document.getElementById('hud-fps-display');
+            
+            setInterval(() => {
+                const randomPing = Math.floor(Math.random() * 12) + 22;
+                pingDisplay.innerText = `ORBIT: ${randomPing} ms`;
+            }, 1000);
+
+            let lastCalledTime;
+            let fps;
+            function calcFPS() {
+                if(!lastCalledTime) {
+                    lastCalledTime = performance.now();
+                    fps = 0;
+                } else {
+                    let delta = (performance.now() - lastCalledTime)/1000;
+                    lastCalledTime = performance.now();
+                    fps = Math.round(1/delta);
+                }
+                fpsDisplay.innerText = `NAV: ${Math.min(fps, 60)}`;
+                requestAnimationFrame(calcFPS);
+            }
+            requestAnimationFrame(calcFPS);
         }
 
         initNeuralBackground();
         fetchLinks();
+        startDiagnosticsHUD();
     </script>
 </body>
 </html>
